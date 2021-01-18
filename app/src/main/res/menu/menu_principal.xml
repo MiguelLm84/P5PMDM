@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/accionCrearTarea"
+        android:icon="@drawable/clipboard"
+        android:title="@string/accionCrear_tarea" />
+    <item
+        android:id="@+id/accionModificar"
+        android:icon="@drawable/editartarea2"
+        android:title="@string/accionModificarTarea" />
+    <item
+        android:id="@+id/accionEliminar"
+        android:icon="@drawable/eliminar"
+        android:title="@string/accionEliminarTarea" />
+</menu>
