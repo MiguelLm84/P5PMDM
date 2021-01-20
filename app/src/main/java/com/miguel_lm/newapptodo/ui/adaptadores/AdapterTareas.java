@@ -18,13 +18,12 @@ import java.util.List;
 public class AdapterTareas extends RecyclerView.Adapter<ViewHolderTarea> {
 
     private List<Tarea> listaTareas;
-    final Context context;
+    Context context;
     private final ListenerTareas listenerTareas;
 
     public AdapterTareas(final Context context, List<Tarea> listaTareas, ListenerTareas listenerTareas) {    //final Context context,
-        this.context = context;
+        //this.context = context;
         this.listaTareas = listaTareas;
-        //this.listaTareas = TareaLab.get(context).getTareas();
         this.listenerTareas = listenerTareas;
     }
 

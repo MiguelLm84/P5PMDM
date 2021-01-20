@@ -1,7 +1,6 @@
 package com.miguel_lm.newapptodo.ui;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -54,6 +53,9 @@ public class ActivityTarea extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tarea2);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.to_do__2_);
 
         // Controles
         editTextTareaTitulo = findViewById(R.id.ed_nomTarea);
@@ -74,7 +76,6 @@ public class ActivityTarea extends AppCompatActivity {
         else {
             fechaLimiteSeleccionada = new Date();
         }
-
         mostrarFecha();
     }
 
@@ -118,8 +119,8 @@ public class ActivityTarea extends AppCompatActivity {
     }
 
     public void buttonCancelarClick(View view) {
-
         finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     /** Guarda la tarea nueva o existente en la BD
@@ -151,7 +152,7 @@ public class ActivityTarea extends AppCompatActivity {
             bundle.putString("Titulo", titulo);
             bundle.putString("Fecha", fecha);
             frag1.setArguments(bundle);
-            //listaTareas.add(nuevaTarea);
+            listaTareas.add(nuevaTarea);
 
             Toast.makeText(getApplicationContext(),"tarea añadida a la BD correctamente.",Toast.LENGTH_LONG).show();
 
@@ -187,6 +188,7 @@ public class ActivityTarea extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         } else {
             super.onBackPressed();
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
 }

@@ -11,91 +11,78 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
         android:layout_marginEnd="8dp"
-        android:backgroundTint="#020202"
+        android:layout_marginBottom="2dp"
+        android:backgroundTint="@color/white"
         android:padding="2dp"
-        app:cardCornerRadius="4dp">
+        app:cardCornerRadius="8dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:foregroundTint="#FFFFFF"
-            android:padding="2dp">
+            android:padding="3dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#B2DFDB"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/fondoazulrejilla"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.333"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0">
 
-                <TextView
-                    android:id="@+id/tv_fecha"
+                <CheckBox
+                    android:id="@+id/checkBoxSeleccion"
+                    style="@style/Widget.AppCompat.CompoundButton.CheckBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:fontFamily="@font/amaranth"
-                    android:text="@string/tv_fecha_tarea"
-                    android:textColor="#020202"
-                    android:textSize="16sp"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_nombreTarea"
-                    tools:layout_editor_absoluteX="122dp" />
+                    android:backgroundTint="#FFFFFF"
+                    android:buttonTint="#FFFFFF"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_tareaNueva"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_tareaNueva"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="4dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
                     android:fontFamily="@font/amaranth"
                     android:text="@string/tv_tareaNueva"
-                    android:textColor="#020202"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_fechaNueva"
-                    app:layout_constraintStart_toEndOf="@+id/tv_nombreTarea"
+                    android:textColor="#FFFFFF"
+                    android:textSize="22sp"
+                    app:layout_constraintStart_toEndOf="@+id/checkBoxSeleccion"
                     app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_nombreTarea"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp"
-                    android:fontFamily="@font/amaranth"
-                    android:text="@string/tv_nombre_tarea"
-                    android:textColor="#020202"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_fecha"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="122dp" />
 
                 <TextView
                     android:id="@+id/tv_fechaNueva"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="52dp"
+                    android:layout_marginBottom="8dp"
                     android:fontFamily="@font/amaranth"
                     android:text="@string/tv_fecha_nueva"
-                    android:textColor="#020202"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toEndOf="@+id/tv_fecha"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_nombreTarea" />
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_tareaNueva" />
 
                 <ImageButton
                     android:id="@+id/btn_Fav_blanco"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/todo"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_eliminar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_estrella_1_blanco" />
@@ -104,29 +91,30 @@
                     android:id="@+id/btn_Fav_amarillo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="25dp"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/todo"
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.055"
+                    app:layout_constraintVertical_bias="0.0"
                     app:srcCompat="@drawable/ic_estrella_1" />
 
                 <ImageButton
                     android:id="@+id/btn_eliminar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="16dp"
                     android:background="@android:color/transparent"
                     android:contentDescription="@string/todo"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/btn_Fav_blanco"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_Fav_amarillo"
                     app:srcCompat="@drawable/basura__1_" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

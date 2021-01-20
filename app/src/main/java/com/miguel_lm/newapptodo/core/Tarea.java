@@ -48,7 +48,6 @@ public class Tarea implements Serializable {
     }
 
     public String getTitulo() {
-
         return titulo;
     }
 
@@ -81,7 +80,6 @@ public class Tarea implements Serializable {
     }
 
     public Date getFechaCreacion() {
-
         return fechaCreacion;
     }
 
@@ -100,12 +98,10 @@ public class Tarea implements Serializable {
     }
 
     public String toStringTarea(){
-
         return "\n· TITULO: "+getTitulo()+"\n\n· FECHA: "+getFechaTexto();
     }
 
     public void modificar(String titulo, Date fecha) {
-
         this.titulo = titulo;
         this.fechaCreacion = fecha;
     }

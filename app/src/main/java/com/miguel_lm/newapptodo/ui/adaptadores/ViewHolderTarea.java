@@ -21,21 +21,21 @@ import java.util.List;
 
 public class ViewHolderTarea extends RecyclerView.ViewHolder {
 
-    final TextView textViewTarea_Fecha;
-    final TextView textViewTarea_Titulo;
-    private final CardView cardViewTarea;
-    final ImageButton btn_fav,btn_fav_activado, btn_elimimnar;
-    final List<Tarea> listaFav;
+    private TextView tv_Tarea_Fecha;
+    private TextView tv_Tarea_Titulo;
+    private CardView cardViewTarea;
+    private ImageButton btn_fav,btn_fav_activado, btn_elimimnar;
+    private List<Tarea> listaFav;
 
-    private final ListenerTareas listenerTareas;
+    private ListenerTareas listenerTareas;
 
     public ViewHolderTarea(@NonNull View itemView, ListenerTareas listenerTareas) {
         super(itemView);
 
         this.listenerTareas = listenerTareas;
 
-        textViewTarea_Titulo = itemView.findViewById(R.id.ed_nomTarea);
-        textViewTarea_Fecha = itemView.findViewById(R.id.textViewTareaFechaLimite);
+        tv_Tarea_Titulo = itemView.findViewById(R.id.tv_tareaNueva);
+        tv_Tarea_Fecha = itemView.findViewById(R.id.tv_fechaNueva);
         cardViewTarea = itemView.findViewById(R.id.CardViewTarea);
         btn_fav = itemView.findViewById(R.id.btn_Fav_blanco);
         btn_fav_activado = itemView.findViewById(R.id.btn_Fav_amarillo);
@@ -45,8 +45,8 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
 
     public void mostrarTarea(final Tarea tarea,Context context) {
 
-        //textViewTarea_Titulo.setText(tarea.getTitulo());
-        //textViewTarea_Fecha.setText(tarea.getFechaTexto());
+        tv_Tarea_Titulo.setText(tarea.getTitulo());
+        tv_Tarea_Fecha.setText(tarea.getFechaTexto());
 
         btn_fav.setOnClickListener(v -> {
             btn_fav.setVisibility(View.INVISIBLE);
@@ -70,9 +70,7 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
                 Toast.makeText(context, "Tarea eliminada", Toast.LENGTH_SHORT).show();
             });
             builderEliminar_Confirmar.create().show();
-            //return false;
         });
-
 
         final String colorSeleccionado = "#ffff0000";
         final String colorNOSeleccionado = "#03DAC5";
@@ -85,7 +83,5 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
 
             listenerTareas.seleccionarTarea(tarea);
         });
-
     }
-
 }

@@ -39,43 +39,35 @@ public class MainActivity extends AppCompatActivity {
     private long tiempoParaSalir = 0;
     List<Tarea> listaTareas;
     AdapterTareas adapterTareas;
-    LinearLayout toolBar;
+    //LinearLayout toolBar;
     Tarea tareaAmodificar;
     List<Tarea> listaTareasSeleccionadas;
     ArrayList<Tarea> listaTareasFinalizadas;
     TareaLab tareaLab;
-    Navigation navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.clipboard);*/
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        getSupportActionBar().setIcon(R.drawable.to_do__2_);
 
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+        BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_favoritas, R.id.navigation_tareas,  R.id.navigation_caducadas)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
-        //TareaLab tareaLab = TareaLab.get(this);
-
-     //   List<Tarea> lista = tareaLab.getTareas();
-       // Log.d("TAREAS", "num tareas " + lista);
-        //Log.d("TAREAS", "TAREA1 " + lista.get(0));
     }
 
     public void botonNuevaTareaClick(View view) {
 
         Intent intentNuevaTarea = new Intent(this, ActivityTarea.class);
         startActivity(intentNuevaTarea);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     @Override
@@ -90,11 +82,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.accionCrearTarea) {
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             crearTarea();
+
         } else if (item.getItemId() == R.id.accionModificar) {
             accionEscogerYModificar();
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         } else if (item.getItemId() == R.id.accionEliminar) {
             accionEscogerYEliminar();
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -148,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             String titulo = edTxtTarea.getText().toString();
 
             if(edTxtTarea.getText().toString().length()<=0){
-                Toast.makeText(this, "Debe escoger una fecha", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Debe escoger una fecha", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -158,18 +154,18 @@ public class MainActivity extends AppCompatActivity {
                 //todo: método añadir a BD.
                 listaTareas.add(nuevaTarea);
 
-                Toast.makeText(this,"tarea añadida a la BD correctamente.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"tarea añadida a la BD correctamente.",Toast.LENGTH_LONG).show();
 
-                Toast.makeText(this, "Evento añadido.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Evento añadido.", Toast.LENGTH_SHORT).show();
             }
             else {
                 tareaAmodificar.modificar(titulo, calendar.getTime());
 
                 tareaLab.get(this).updateTarea(tareaAmodificar);
                 //todo: método modificar a BD.
-                Toast.makeText(this," Tarea modificada correctamente en la BD.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext()," Tarea modificada correctamente en la BD.",Toast.LENGTH_LONG).show();
 
-                Toast.makeText(this, "Evento modificado.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Evento modificado.", Toast.LENGTH_SHORT).show();
             }
             dialog.dismiss();
             adapterTareas.notifyDataSetChanged();
@@ -269,6 +265,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         } else {
             super.onBackPressed();
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
 }
