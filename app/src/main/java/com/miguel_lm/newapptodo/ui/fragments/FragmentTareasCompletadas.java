@@ -23,11 +23,11 @@ import com.miguel_lm.newapptodo.ui.adaptador.AdapterTareas;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FragmentTareasFav extends Fragment implements ListenerTareas {
+public class FragmentTareasCompletadas extends Fragment implements ListenerTareas {
 
-    public static FragmentTareasFav FragmentTareasFavInstance;
+    public static FragmentTareasCompletadas FragmentTareasInstanceCompletadas;
 
-    AdapterTareas adapterTareasFav;
+    AdapterTareas adapterTareasCompletadas;
     LinearLayout toolBar;
     List<Tarea> listaTareasSeleccionadas;
     TareaLab tareaLab;
@@ -38,11 +38,11 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        FragmentTareasFavInstance = this;
+        FragmentTareasInstanceCompletadas = this;
 
-        View root = inflater.inflate(R.layout.fragment_tareas_fav, container, false);
+        View root = inflater.inflate(R.layout.fragment_tareas_completadas, container, false);
 
-        toolBar = root.findViewById(R.id.toolbar);
+        toolBar = root.findViewById(R.id.toolbar3);
         toolBar.setVisibility(View.GONE);
 
         ImageView imageButtonEliminarTarea = root.findViewById(R.id.btn_delete);
@@ -50,21 +50,19 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
         imageButtonModificarTarea = root.findViewById(R.id.btn_modificar);
 
         tareaLab = TareaLab.get(getContext());
-        List<Tarea> listaTareasFav = tareaLab.getTareasFavoritas();
+        List<Tarea> listaTareasCompletadas = tareaLab.getTareasCaducadas();
 
-        RecyclerView recyclerViewTareasFav = root.findViewById(R.id.recyclerViewTareasFav);
-        recyclerViewTareasFav.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapterTareasFav = new AdapterTareas(getContext(), listaTareasFav, this);
-        recyclerViewTareasFav.setAdapter(adapterTareasFav);
+        RecyclerView recyclerViewTareasCaducadas = root.findViewById(R.id.recyclerViewTareasCaducadas);
+        recyclerViewTareasCaducadas.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapterTareasCompletadas = new AdapterTareas(getContext(), listaTareasCompletadas, this);
+        recyclerViewTareasCaducadas.setAdapter(adapterTareasCompletadas);
 
         listaTareasSeleccionadas = new ArrayList<>();
-
 
         imageButtonSalirToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickToolbarSalir();
-
             }
         });
 
@@ -72,7 +70,6 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
             @Override
             public void onClick(View v) {
                 onClickToolbarModificar();
-
             }
         });
 
@@ -80,21 +77,17 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
             @Override
             public void onClick(View v) {
                 onClickToolbarEliminar();
-
             }
         });
 
 
         return root;
-
     }
 
     public void refrescarListado() {
 
-        adapterTareasFav.actualizarListado(TareaLab.get(getContext()).getTareasFavoritas());
-
+        adapterTareasCompletadas.actualizarListado(TareaLab.get(getContext()).getTareasCaducadas());
     }
-
 
     ////////////////////////////////////////////////////////////////
     // LISTENER VIEW HOLDER TAREA
@@ -102,7 +95,6 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
 
     @Override
     public void seleccionarTarea(Tarea tarea) {
-
         if (tarea.isTareaSeleccionada()) {
             listaTareasSeleccionadas.add(tarea);
         } else {
@@ -110,7 +102,6 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
         }
 
         toolBar.setVisibility(listaTareasSeleccionadas.isEmpty() ? View.GONE : View.VISIBLE);
-
         imageButtonModificarTarea.setVisibility(listaTareasSeleccionadas.size() == 1 ? View.VISIBLE : View.GONE);
     }
 
@@ -127,17 +118,18 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
     @Override
     public void seleccionarTareasFavRemove(Tarea tarea) {
 
-        refrescarListado();
     }
 
     @Override
     public void completarTarea(Tarea tarea, boolean completada) {
 
+        if (!completada)
+            refrescarListado();
     }
 
 
     ////////////////////////////////////////////////////////////////
-    // LISTENER VIEW HOLDER TAREA
+    // TOOLBAR
     ////////////////////////////////////////////////////////////////
 
     public void onClickToolbarEliminar() {
@@ -161,7 +153,6 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
             builderEliminar_Confirmar.setIcon(R.drawable.exclamation);
             builderEliminar_Confirmar.setTitle("¿Eliminar los elementos?");
             String textoNombresTareas = null;
-
 
             // Generar array con los nombres de las tareas a borrar
             ArrayList<String> listaTareasAeliminar = new ArrayList<>();
@@ -190,6 +181,7 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
                 }
                 listaTareasSeleccionadas.clear();
 
+
                 Toast.makeText(getContext(), "Tareas eliminadas correctamente", Toast.LENGTH_SHORT).show();
 
                 refrescarListado();
@@ -215,52 +207,7 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
 
         listaTareasSeleccionadas.clear();
         toolBar.setVisibility(View.GONE);
-        adapterTareasFav.notifyDataSetChanged();
+        adapterTareasCompletadas.notifyDataSetChanged();
         Toast.makeText(getContext(), "Salir sin seleccionar", Toast.LENGTH_SHORT).show();
     }
-
-    /*private void mostrarTareasCaducadas(final List<Tarea> listaTareasFinalizadas) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setIcon(R.drawable.eliminar);
-        builder.setTitle("Tareas Finalizadas");
-
-        String listaTareasParaBorrar = null;
-        String[] arrayTareas = new String[listaTareasFinalizadas.size()];
-        final boolean[] tareasSeleccionadas = new boolean[listaTareasFinalizadas.size()];
-        for (int i = 0; i < listaTareasFinalizadas.size(); i++) {
-            arrayTareas[i] = "\n· TAREA: " + listaTareasFinalizadas.get(i).getTitulo() + "\n· FECHA:  " + listaTareasFinalizadas.get(i).getFechaTextoCorta();
-            listaTareasParaBorrar =  arrayTareas[i];
-        }
-        builder.setMultiChoiceItems(arrayTareas, tareasSeleccionadas, (dialog, i, isChecked) -> tareasSeleccionadas[i] = isChecked);
-
-        final String finalListaTareasParaBorrar = listaTareasParaBorrar;
-        builder.setPositiveButton("Borrar", (dialog, which) -> {
-
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
-            builder1.setIcon(R.drawable.eliminar);
-            builder1.setTitle("¿Eliminar el elemento?");
-            builder1.setMessage(finalListaTareasParaBorrar);
-
-            AlertDialog.Builder builderEliminar_Confirmar = new AlertDialog.Builder(getContext());
-            builderEliminar_Confirmar.setIcon(R.drawable.exclamation);
-            builderEliminar_Confirmar.setMessage("¿Eliminar los elementos?");
-            builderEliminar_Confirmar.setNegativeButton("Cancelar", null);
-            builderEliminar_Confirmar.setPositiveButton("Borrar", (dialogInterface, which1) -> {
-
-                for (int i = listaTareasFinalizadas.size() - 1; i >= 0; i--) {
-                    if (tareasSeleccionadas[i]) {
-                        listaTareasFav.remove(listaTareasFinalizadas.get(i));
-                        tareaLab.get(getContext()).deleteTarea(listaTareasFinalizadas.get(i));
-                        //todo: método eliminar a BD.
-                    }
-                }
-                Toast.makeText(getContext(), "Tareas eliminadas correctamente", Toast.LENGTH_SHORT).show();
-                this.adapterTareasFav.notifyDataSetChanged();
-            });
-            builderEliminar_Confirmar.create().show();
-        });
-        builder.setNegativeButton("Cancelar", null);
-        builder.create().show();
-    }*/
 }

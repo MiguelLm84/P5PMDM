@@ -11,8 +11,8 @@
         android:title="@string/title_tareas_fav" />
 
     <item
-        android:id="@+id/navigation_caducadas"
+        android:id="@+id/navigation_completadas"
         android:icon="@drawable/cheque"
-        android:title="@string/title_caducadas" />
+        android:title="@string/title_completadas" />
 
 </menu>

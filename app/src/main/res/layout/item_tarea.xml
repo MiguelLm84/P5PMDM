@@ -25,9 +25,12 @@
             android:padding="3dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutTarea"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/fondoazulrejilla"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:backgroundTintMode="screen"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.333"
@@ -105,17 +108,17 @@
 
                 <ImageButton
                     android:id="@+id/btn_eliminar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="40dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
-                    android:background="@android:color/transparent"
+                    android:background="@null"
                     android:contentDescription="@string/todo"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btn_Fav_amarillo"
-                    app:srcCompat="@drawable/basura__1_" />
+                    app:srcCompat="@drawable/eliminar__1_" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

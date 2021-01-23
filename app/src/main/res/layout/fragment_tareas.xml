@@ -14,10 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UselessParent">
 
         <LinearLayout
@@ -25,15 +21,15 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:background="@drawable/fondonegro3d"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <ImageView
+                android:id="@+id/btn_salir"
                 android:layout_width="35dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:background="@null"
                 android:contentDescription="@string/todo"
-                android:onClick="onClickToolbarSalir"
                 android:padding="6dp"
                 android:src="@drawable/flecha" />
 
@@ -53,24 +49,22 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageButton"
+                android:id="@+id/btn_modificar"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:background="@null"
                 android:contentDescription="@string/todo"
-                android:onClick="onClickToolbarModificar"
                 android:padding="6dp"
                 android:src="@drawable/edit_button" />
 
             <ImageView
-                android:id="@+id/imageButton2"
+                android:id="@+id/btn_delete"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="16dp"
                 android:background="@null"
                 android:contentDescription="@string/todo"
-                android:onClick="onClickToolbarModificar"
                 android:padding="6dp"
                 android:src="@drawable/eliminar__1_" />
 
@@ -79,8 +73,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewTareas"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
+            android:layout_height="match_parent"
+            android:paddingBottom="80dp"
+            android:clipToPadding="false"
+            />
     </LinearLayout>
 
 </FrameLayout>

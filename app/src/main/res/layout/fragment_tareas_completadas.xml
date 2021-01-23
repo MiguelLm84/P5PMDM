@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ContenedorFragmentsTareasFav"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ContenedorFragmentsTareasCaducadas"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondopantallablanco3d_2"
+    android:background="@drawable/fondoblanco3d_6"
     android:orientation="vertical"
-    tools:context=".ui.fragments.FragmentTareasFav">
+    tools:context=".ui.fragments.FragmentTareasCompletadas">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,11 +16,11 @@
         tools:ignore="UselessParent">
 
         <LinearLayout
-            android:id="@+id/toolbar"
+            android:id="@+id/toolbar3"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:background="@drawable/fondonegro3d"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/btn_salir"
@@ -33,7 +33,7 @@
                 android:src="@drawable/flecha" />
 
             <TextView
-                android:id="@+id/tv_titulo_toolbar2"
+                android:id="@+id/tv_titulo_toolbar3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -44,7 +44,7 @@
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_modificarItem"
-                app:layout_constraintStart_toEndOf="@+id/btn_salir2"
+                app:layout_constraintStart_toEndOf="@+id/btn_salir3"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -70,7 +70,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewTareasFav"
+            android:id="@+id/recyclerViewTareasCaducadas"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingBottom="80dp"

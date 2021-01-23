@@ -8,12 +8,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import com.miguel_lm.newapptodo.R;
 import com.miguel_lm.newapptodo.core.Tarea;
 import com.miguel_lm.newapptodo.core.TareaLab;
-import com.miguel_lm.newapptodo.ui.fragments.FragmentTareas;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,20 +32,11 @@ public class ActivityTarea extends AppCompatActivity {
     private Date fechaLimiteSeleccionada;
 
     List<Tarea> listaTareas;
-    public static final String TAREA_EDITAR = "TAREA";
     public enum ActivityTareaModo { crear, editar}
     private ActivityTareaModo activityTareaModo;
     private long tiempoParaSalir = 0;
-
+    TareaLab tareaLab;
     Tarea tareaEditar;
-
-    /*List<Tarea> listaTareas;
-    private AdapterTareas adapterTareas;
-    private LinearLayout toolBar;
-    private Tarea tareaAmodificar;
-    List<Tarea> listaTareasSeleccionadas;
-    ArrayList<Tarea> listaTareasFinalizadas;
-    TareaLab tareaLab;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +46,9 @@ public class ActivityTarea extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.to_do__2_);
 
+        tareaLab = TareaLab.get(this);
+        listaTareas = tareaLab.getTareas();
+
         // Controles
         editTextTareaTitulo = findViewById(R.id.ed_nomTarea);
         //checkBoxTareaFav = findViewById(R.id.checkBoxTareaFav);
@@ -65,7 +57,6 @@ public class ActivityTarea extends AppCompatActivity {
 
         // Recoger la tarea a editar
         // Si no existe, se está creando una nueva
-        tareaEditar = (Tarea) getIntent().getSerializableExtra(TAREA_EDITAR);
         activityTareaModo = tareaEditar == null ? ActivityTareaModo.crear : ActivityTareaModo.editar;
 
         // Si hay una tarea que editar, se muestra
@@ -119,6 +110,7 @@ public class ActivityTarea extends AppCompatActivity {
     }
 
     public void buttonCancelarClick(View view) {
+        setResult(RESULT_CANCELED);
         finish();
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
@@ -140,18 +132,12 @@ public class ActivityTarea extends AppCompatActivity {
         }
 
         // Crear la nueva tarea si estamos en modo crear
-        TareaLab tareaLab = TareaLab.get(this);
+        //TareaLab tareaLab = TareaLab.get(this);
         if (activityTareaModo == ActivityTareaModo.crear) {
 
             // Crear una tarea y guardarla en la BD
             Tarea nuevaTarea = new Tarea(titulo, /*esFavorita, estaCompletada,*/ fechaLimiteSeleccionada);
             tareaLab.insertTarea(nuevaTarea);
-
-            Fragment frag1 = new FragmentTareas();
-            Bundle bundle=new Bundle();
-            bundle.putString("Titulo", titulo);
-            bundle.putString("Fecha", fecha);
-            frag1.setArguments(bundle);
             listaTareas.add(nuevaTarea);
 
             Toast.makeText(getApplicationContext(),"tarea añadida a la BD correctamente.",Toast.LENGTH_LONG).show();
@@ -161,21 +147,14 @@ public class ActivityTarea extends AppCompatActivity {
         else {
 
             // Modificar la tarea y actualizarla en la BD
-            tareaEditar.modificar(titulo, fechaLimiteSeleccionada);  // todo: cambiar la fecha
+            tareaEditar.modificar(titulo, fechaLimiteSeleccionada);
             tareaLab.updateTarea(tareaEditar);
         }
-
-        /*Intent intent = new Intent(this, FragmentTareas.class);
-        Bundle bundle = new Bundle();
-
-        bundle.putString("Titulo", titulo);
-        bundle.putString("Fecha", fecha);
-
-        intent.putExtras(bundle);*/
 
         // Cerrar el activity devolviendo ok
         setResult(RESULT_OK);
         finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     @Override
@@ -191,4 +170,5 @@ public class ActivityTarea extends AppCompatActivity {
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
+
 }

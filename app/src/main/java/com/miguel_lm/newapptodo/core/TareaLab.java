@@ -31,13 +31,13 @@ public class TareaLab {
         return tareaDao.getTareas();
     }
 
-    /*public List<Tarea> getTareasFavoritas() {
+    public List<Tarea> getTareasFavoritas() {
         return tareaDao.getTareasFavoritas();
     }
 
     public List<Tarea> getTareasCaducadas() {
         return tareaDao.getTareasCaducadas();
-    }*/
+    }
 
     public void insertTarea(Tarea tarea)
     {

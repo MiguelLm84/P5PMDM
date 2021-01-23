@@ -1,7 +1,5 @@
 package com.miguel_lm.newapptodo.core;
 
-import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -25,23 +23,24 @@ public class Tarea implements Serializable {
     @ColumnInfo(name="fechaCreacion")
     public Date fechaCreacion;
 
-    /*@ColumnInfo(name="esFav")
+    @ColumnInfo(name="esFav")
     public boolean esFav;
 
     @ColumnInfo(name="completado")
-    public boolean completado;*/
+    public boolean completado;
 
     @ColumnInfo(name="fechaLimite")
     public Date fechaLimite;
 
+    // NO SE GUARDA EN BD
     /** Indica si la tarea se ha seleccionado en el listado para trabajar con lotes de tareas */
     private boolean tareaSeleccionada;
 
     public Tarea(String titulo, /*boolean esFav, boolean completado,*/ Date fechaLimite) {
         this.titulo = titulo;
         this.fechaCreacion = new Date();
-        //this.esFav = esFav;
-        //this.completado = completado;
+        this.esFav = false;
+        this.completado = false;
         this.fechaLimite = fechaLimite;
         tareaSeleccionada = false;
         mId = 0;
@@ -55,7 +54,7 @@ public class Tarea implements Serializable {
         this.titulo = titulo;
     }
 
-    /*public boolean isEsFav() {
+    public boolean isEsFav() {
         return esFav;
     }
 
@@ -69,7 +68,7 @@ public class Tarea implements Serializable {
 
     public void setCompletado(boolean completado) {
         this.completado = completado;
-    }*/
+    }
 
     public Date getFechaLimite() {
         return fechaLimite;

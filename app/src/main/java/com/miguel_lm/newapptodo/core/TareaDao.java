@@ -14,11 +14,11 @@ public interface TareaDao {
     @Query("SELECT * FROM tarea")
     List<Tarea> getTareas();
 
-    //@Query("SELECT * FROM tarea WHERE esFav = 1")
-    //List<Tarea> getTareasFavoritas();
+    @Query("SELECT * FROM tarea WHERE esFav = 1")
+    List<Tarea> getTareasFavoritas();
 
-    //@Query("SELECT * FROM tarea WHERE completado = 1")
-    //List<Tarea> getTareasCaducadas();
+    @Query("SELECT * FROM tarea WHERE completado = 1")
+    List<Tarea> getTareasCaducadas();
 
     @Insert
     void insert(Tarea tarea);

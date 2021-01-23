@@ -11,11 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -26,7 +26,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.miguel_lm.newapptodo.R;
 import com.miguel_lm.newapptodo.core.Tarea;
 import com.miguel_lm.newapptodo.core.TareaLab;
-import com.miguel_lm.newapptodo.ui.adaptadores.AdapterTareas;
+import com.miguel_lm.newapptodo.ui.fragments.FragmentTareas;
+import com.miguel_lm.newapptodo.ui.fragments.FragmentTareasCompletadas;
+import com.miguel_lm.newapptodo.ui.fragments.FragmentTareasFav;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,16 +36,15 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     private long tiempoParaSalir = 0;
-    List<Tarea> listaTareas;
-    AdapterTareas adapterTareas;
-    //LinearLayout toolBar;
-    Tarea tareaAmodificar;
-    List<Tarea> listaTareasSeleccionadas;
-    ArrayList<Tarea> listaTareasFinalizadas;
-    TareaLab tareaLab;
+    private List<Tarea> listaTareas;
+    private Tarea tareaAmodificar;
+    private TareaLab tareaLab;
+
+    // Request para ir a ficha de nueva tarea
+    private static final int REQUEST_NUEVA_TAREA = 1234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +57,40 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_favoritas, R.id.navigation_tareas,  R.id.navigation_caducadas)
+                R.id.navigation_favoritas, R.id.navigation_tareas,  R.id.navigation_completadas)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        tareaLab = TareaLab.get(this);
+        listaTareas = tareaLab.getTareas();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Hay que saber qué activity está volviendo
+        if (requestCode == REQUEST_NUEVA_TAREA   &&   resultCode == RESULT_OK) {
+
+            if (FragmentTareas.FragmentTareasInstance != null)
+                FragmentTareas.FragmentTareasInstance.refrescarListado();
+            if (FragmentTareasFav.FragmentTareasFavInstance != null)
+                FragmentTareasFav.FragmentTareasFavInstance.refrescarListado();
+            if (FragmentTareasCompletadas.FragmentTareasInstanceCompletadas != null)
+                FragmentTareasCompletadas.FragmentTareasInstanceCompletadas.refrescarListado();
+        }
+
+
+    }
+
+    /** El botón de nueva tarea está centralizado en la ficha principal
+     * Al volver de crear tarea, se deben actualizar los 3 fragments      */
     public void botonNuevaTareaClick(View view) {
 
         Intent intentNuevaTarea = new Intent(this, ActivityTarea.class);
-        startActivity(intentNuevaTarea);
+        startActivityForResult(intentNuevaTarea, REQUEST_NUEVA_TAREA);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
@@ -82,15 +106,13 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.accionCrearTarea) {
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             crearTarea();
 
         } else if (item.getItemId() == R.id.accionModificar) {
             accionEscogerYModificar();
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
         } else if (item.getItemId() == R.id.accionEliminar) {
             accionEscogerYEliminar();
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -144,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             String titulo = edTxtTarea.getText().toString();
 
             if(edTxtTarea.getText().toString().length()<=0){
-                Toast.makeText(getApplicationContext(), "Debe escoger una fecha", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Debe introducir un título", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -163,12 +185,12 @@ public class MainActivity extends AppCompatActivity {
 
                 tareaLab.get(this).updateTarea(tareaAmodificar);
                 //todo: método modificar a BD.
+
                 Toast.makeText(getApplicationContext()," Tarea modificada correctamente en la BD.",Toast.LENGTH_LONG).show();
 
                 Toast.makeText(getApplicationContext(), "Evento modificado.", Toast.LENGTH_SHORT).show();
             }
             dialog.dismiss();
-            adapterTareas.notifyDataSetChanged();
         });
 
         buttonCancelar.setOnClickListener(v -> dialog.dismiss());
@@ -184,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
 
         final String[] arrayTareasAMostrar = new String[listaTareas.size()];
         for (int i = 0; i < listaTareas.size(); i++) {
-            arrayTareasAMostrar[i] = "\n· TAREA: " + listaTareas.get(i).getTitulo() + "\n· FECHA:  " + listaTareas.get(i).getFechaTextoCorta();
+            arrayTareasAMostrar[i] = listaTareas.get(i).toStringTarea();
         }
         builderDialogEscogerTareas.setSingleChoiceItems(arrayTareasAMostrar, -1, (dialog, posicionElementoSeleccionado) -> tareaAmodificar = listaTareas.get(posicionElementoSeleccionado));
         builderDialogEscogerTareas.setPositiveButton("Modificar", (dialog, i) -> {
@@ -238,9 +260,8 @@ public class MainActivity extends AppCompatActivity {
                         //todo: método eliminar en la BD.
                     }
                 }
-                Toast.makeText(getApplicationContext(),"Tareas eliminadas correctamente en la BD.",Toast.LENGTH_LONG).show(); //getApplicationContext()
+                Toast.makeText(getApplicationContext(),"Tareas eliminadas correctamente en la BD.",Toast.LENGTH_LONG).show();
                 Toast.makeText(getApplicationContext(), "Tareas eliminadas correctamente.", Toast.LENGTH_SHORT).show();
-                this.adapterTareas.notifyDataSetChanged();
             });
             builderEliminar_Confirmar.create().show();
             dialog.dismiss();
@@ -268,4 +289,5 @@ public class MainActivity extends AppCompatActivity {
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
     }
+
 }

@@ -12,8 +12,8 @@
         android:label="@string/title_tareas_fav"
         tools:layout="@layout/fragment_tareas_fav">
         <action
-            android:id="@+id/action_navigation_favoritas_to_navigation_caducadas"
-            app:destination="@id/navigation_caducadas" />
+            android:id="@+id/action_navigation_favoritas_to_navigation_completadas"
+            app:destination="@id/navigation_completadas" />
         <action
             android:id="@+id/action_navigation_favoritas_to_navigation_tareas"
             app:destination="@id/navigation_tareas"
@@ -36,20 +36,20 @@
             app:popEnterAnim="@anim/slide_up"
             app:popExitAnim="@anim/slide_off" />
         <action
-            android:id="@+id/action_navigation_tareas_to_navigation_caducadas"
-            app:destination="@id/navigation_caducadas" />
+            android:id="@+id/action_navigation_tareas_to_navigation_completadas"
+            app:destination="@id/navigation_completadas" />
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_caducadas"
-        android:name="com.miguel_lm.newapptodo.ui.fragments.FragmentTareasCaducadas"
-        android:label="@string/title_caducadas"
-        tools:layout="@layout/fragment_tareas_caducadas">
+        android:id="@+id/navigation_completadas"
+        android:name="com.miguel_lm.newapptodo.ui.fragments.FragmentTareasCompletadas"
+        android:label="@string/title_completadas"
+        tools:layout="@layout/fragment_tareas_completadas">
         <action
-            android:id="@+id/action_navigation_caducadas_to_navigation_favoritas"
+            android:id="@+id/action_navigation_completadas_to_navigation_favoritas"
             app:destination="@id/navigation_favoritas" />
         <action
-            android:id="@+id/action_navigation_caducadas_to_navigation_tareas2"
+            android:id="@+id/action_navigation_completadas_to_navigation_tareas2"
             app:destination="@id/navigation_tareas" />
     </fragment>
 </navigation>
