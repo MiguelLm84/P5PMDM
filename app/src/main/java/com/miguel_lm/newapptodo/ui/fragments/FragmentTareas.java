@@ -1,12 +1,16 @@
 package com.miguel_lm.newapptodo.ui.fragments;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,8 +24,12 @@ import com.miguel_lm.newapptodo.core.TareaLab;
 import com.miguel_lm.newapptodo.ui.ListenerTareas;
 import com.miguel_lm.newapptodo.ui.adaptador.AdapterTareas;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class FragmentTareas extends Fragment implements ListenerTareas {
 
@@ -30,10 +38,51 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
     AdapterTareas adapterTareas;
     private LinearLayout toolBar;
     List<Tarea> listaTareasSeleccionadas;
+    ArrayList<Tarea> listaTareasFinalizadas;
     TareaLab tareaLab;
-
+    List<Tarea> listaTareas;
     private ImageView imageButtonModificarTarea;
 
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+    public FragmentTareas() {
+        // Required empty public constructor
+    }
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment Fragment1.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static FragmentTareas newInstance(String param1, String param2) {
+        FragmentTareas fragment = new FragmentTareas();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +100,7 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         imageButtonModificarTarea = root.findViewById(R.id.btn_modificar);
 
         tareaLab = TareaLab.get(getContext());
-        List<Tarea> listaTareas = tareaLab.getTareas();
+        listaTareas = tareaLab.getTareas();
 
         RecyclerView recyclerViewTareas = root.findViewById(R.id.recyclerViewTareas);
         recyclerViewTareas.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -62,15 +111,14 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
             @Override
             public void onClick(View v) {
                 onClickToolbarSalir();
-
             }
         });
 
         imageButtonModificarTarea.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickToolbarModificar();
-
+                //onClickToolbarModificar(tarea);
+                crearTarea();
             }
         });
 
@@ -78,12 +126,29 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
             @Override
             public void onClick(View v) {
                 onClickToolbarEliminar();
-
             }
         });
 
-
         return root;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Date fechaActual = new Date();
+        listaTareasFinalizadas = new ArrayList<>();
+
+        for (Tarea tarea : listaTareas) {
+
+            if (tarea.getFechaLimite().compareTo(fechaActual) < 0) {
+                listaTareasFinalizadas.add(tarea);
+            }
+        }
+
+        if (!listaTareasFinalizadas.isEmpty()) {
+            mostrarTareasCaducadas(listaTareasFinalizadas);
+        }
     }
 
     public void refrescarListado() {
@@ -129,7 +194,6 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
     public void completarTarea(Tarea tarea, boolean completada) {
 
     }
-
 
     ////////////////////////////////////////////////////////////////
     // TOOLBAR
@@ -197,9 +261,70 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         builderEliminar.create().show();
     }
 
-    public void onClickToolbarModificar() {
+    private void crearTarea() {
+        onClickToolbarModificar(null);
+    }
 
-        //todo:implementar el método de modificar de la toolbar.
+    public void onClickToolbarModificar(Tarea tareaAmodificar) {
+        
+        AlertDialog.Builder build = new AlertDialog.Builder(getContext());
+        final View dialogLayout = LayoutInflater.from(getContext()).inflate(R.layout.dialog_crear_tarea, null);
+        build.setView(dialogLayout);
+        final AlertDialog dialog = build.create();
+
+        final EditText edTxtTarea = dialogLayout.findViewById(R.id.edTxt_tarea);
+        final TextView tvFecha = dialogLayout.findViewById(R.id.tv_fecha);
+        final Button buttonAceptar = dialogLayout.findViewById(R.id.btn_aceptar);
+        final Button buttonCancelar = dialogLayout.findViewById(R.id.btn_cancelar);
+
+        final Calendar calendar = Calendar.getInstance();
+
+        if (tareaAmodificar != null) {
+            edTxtTarea.setText(tareaAmodificar.getTitulo());
+            tvFecha.setText(tareaAmodificar.getFechaTexto());
+        }
+
+        tvFecha.setOnClickListener(v -> {
+
+            if (tareaAmodificar != null) {
+                calendar.setTime(tareaAmodificar.getFechaLimite());
+            }
+
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH);
+            int year = calendar.get(Calendar.YEAR);
+
+            final DatePickerDialog dpd = new DatePickerDialog(getContext(), (datePicker, year1, monthOfYear, dayOfMonth) -> {
+                calendar.set(Calendar.YEAR, year1);
+                calendar.set(Calendar.MONTH, monthOfYear);
+                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                SimpleDateFormat formatoFecha = new SimpleDateFormat("dd MMMM 'de' yyyy", new Locale("es","ES"));
+                tvFecha.setText(formatoFecha.format(calendar.getTime()));
+            }, year, month, day);
+            dpd.show();
+        });
+
+        buttonAceptar.setOnClickListener(v -> {
+
+            String titulo = edTxtTarea.getText().toString();
+
+            if(edTxtTarea.getText().toString().length()<=0){
+                Toast.makeText(getContext(), "Debe introducir un título", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            tareaAmodificar.modificar(titulo, calendar.getTime());
+            tareaLab.get(getContext()).updateTarea(tareaAmodificar);
+            Toast.makeText(getContext()," Tarea modificada correctamente en la BD.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Evento modificado.", Toast.LENGTH_SHORT).show();
+
+            dialog.dismiss();
+        });
+
+        buttonCancelar.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 
     public void onClickToolbarSalir() {
@@ -212,7 +337,7 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         Toast.makeText(getContext(), "Salir sin seleccionar", Toast.LENGTH_SHORT).show();
     }
 
-    /*private void mostrarTareasCaducadas(final List<Tarea> listaTareasFinalizadas) {
+    private void mostrarTareasCaducadas(final List<Tarea> listaTareasFinalizadas) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setIcon(R.drawable.eliminar);
@@ -255,5 +380,5 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         });
         builder.setNegativeButton("Cancelar", null);
         builder.create().show();
-    }*/
+    }
 }

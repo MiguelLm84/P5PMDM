@@ -36,7 +36,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements ListenerTareas {
 
     private long tiempoParaSalir = 0;
     private List<Tarea> listaTareas;
@@ -290,4 +290,28 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    @Override
+    public void seleccionarTarea(Tarea tarea) {
+
+    }
+
+    @Override
+    public void eliminarTarea(Tarea tarea) {
+
+    }
+
+    @Override
+    public void seleccionarTareasFavAdd(Tarea tarea) {
+
+    }
+
+    @Override
+    public void seleccionarTareasFavRemove(Tarea tarea) {
+
+    }
+
+    @Override
+    public void completarTarea(Tarea tarea, boolean completada) {
+
+    }
 }

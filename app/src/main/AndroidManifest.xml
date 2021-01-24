@@ -4,9 +4,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_new_todo"
+        android:icon="@mipmap/ic_icono_new_todo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_new_todo_round"
+        android:roundIcon="@mipmap/ic_icono_new_todo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppTheme">
         <activity android:name=".ui.ActivitySplash"
