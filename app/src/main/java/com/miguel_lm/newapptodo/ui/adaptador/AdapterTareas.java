@@ -26,7 +26,6 @@ public class AdapterTareas extends RecyclerView.Adapter<ViewHolderTarea> {
         this.listenerTareas = listenerTareas;
     }
 
-    /** Recarga el adapter con datos nuevos */
     public void actualizarListado(List<Tarea> listaTareas) {
         this.listaTareas = listaTareas;
         notifyDataSetChanged();

@@ -32,11 +32,9 @@ public class Tarea implements Serializable {
     @ColumnInfo(name="fechaLimite")
     public Date fechaLimite;
 
-    // NO SE GUARDA EN BD
-    /** Indica si la tarea se ha seleccionado en el listado para trabajar con lotes de tareas */
     private boolean tareaSeleccionada;
 
-    public Tarea(String titulo, /*boolean esFav, boolean completado,*/ Date fechaLimite) {
+    public Tarea(String titulo, Date fechaLimite) {
         this.titulo = titulo;
         this.fechaCreacion = new Date();
         this.esFav = false;
@@ -84,12 +82,12 @@ public class Tarea implements Serializable {
 
     public String getFechaTexto() {
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd MMMM 'de' yyyy ", Locale.getDefault());
-        return formatoFecha.format(fechaCreacion);
+        return formatoFecha.format(fechaLimite);
     }
 
     public String getFechaTextoCorta() {
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy ", Locale.getDefault());
-        return formatoFecha.format(fechaCreacion);
+        return formatoFecha.format(fechaLimite);
     }
 
     public void setFechaCreacion(Date fechaCreacion) {
@@ -102,7 +100,7 @@ public class Tarea implements Serializable {
 
     public void modificar(String titulo, Date fecha) {
         this.titulo = titulo;
-        this.fechaCreacion = fecha;
+        this.fechaLimite = fecha;
     }
 
     public boolean isTareaSeleccionada() {

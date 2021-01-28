@@ -44,5 +44,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/fondo_splash_tarea" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

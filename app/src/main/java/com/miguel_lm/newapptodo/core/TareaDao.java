@@ -14,6 +14,10 @@ public interface TareaDao {
     @Query("SELECT * FROM tarea")
     List<Tarea> getTareas();
 
+
+    @Query("SELECT * FROM tarea WHERE esFav = 0   AND   completado = 0")
+    List<Tarea> getTareasNoFavNoCaducadas();
+
     @Query("SELECT * FROM tarea WHERE esFav = 1")
     List<Tarea> getTareasFavoritas();
 

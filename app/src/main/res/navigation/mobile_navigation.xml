@@ -13,7 +13,9 @@
         tools:layout="@layout/fragment_tareas_fav">
         <action
             android:id="@+id/action_navigation_favoritas_to_navigation_completadas"
-            app:destination="@id/navigation_completadas" />
+            app:destination="@id/navigation_completadas"
+            app:enterAnim="@anim/fragment_open_enter"
+            app:exitAnim="@anim/fragment_open_exit" />
         <action
             android:id="@+id/action_navigation_favoritas_to_navigation_tareas"
             app:destination="@id/navigation_tareas"
@@ -37,7 +39,9 @@
             app:popExitAnim="@anim/slide_off" />
         <action
             android:id="@+id/action_navigation_tareas_to_navigation_completadas"
-            app:destination="@id/navigation_completadas" />
+            app:destination="@id/navigation_completadas"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
 
     <fragment
@@ -47,9 +51,13 @@
         tools:layout="@layout/fragment_tareas_completadas">
         <action
             android:id="@+id/action_navigation_completadas_to_navigation_favoritas"
-            app:destination="@id/navigation_favoritas" />
+            app:destination="@id/navigation_favoritas"
+            app:enterAnim="@anim/zoom_back_in"
+            app:exitAnim="@anim/zoom_back" />
         <action
             android:id="@+id/action_navigation_completadas_to_navigation_tareas2"
-            app:destination="@id/navigation_tareas" />
+            app:destination="@id/navigation_tareas"
+            app:enterAnim="@anim/fragment_fade_enter"
+            app:exitAnim="@anim/fragment_fade_exit" />
     </fragment>
 </navigation>

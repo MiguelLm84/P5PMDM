@@ -14,7 +14,7 @@ public class TareaLab {
 
     private TareaDao tareaDao;
 
-    private TareaLab(Context context){
+    private TareaLab(Context context) {
         Context appContext = context.getApplicationContext();
         DBManagerRoom.AppDatabase database = Room.databaseBuilder(appContext, DBManagerRoom.AppDatabase.class, "tarea").allowMainThreadQueries().build(); //.addMigrations ( MIGRATION_1_2 )
         tareaDao = database.getTareaDao();
@@ -31,6 +31,10 @@ public class TareaLab {
         return tareaDao.getTareas();
     }
 
+    public List<Tarea> getTareasNoFavNoCaducadas() {
+        return tareaDao.getTareasNoFavNoCaducadas();
+    }
+
     public List<Tarea> getTareasFavoritas() {
         return tareaDao.getTareasFavoritas();
     }
@@ -39,18 +43,15 @@ public class TareaLab {
         return tareaDao.getTareasCaducadas();
     }
 
-    public void insertTarea(Tarea tarea)
-    {
+    public void insertTarea(Tarea tarea) {
         tareaDao.insert(tarea);
     }
 
-    public void updateTarea(Tarea tarea)
-    {
+    public void updateTarea(Tarea tarea) {
         tareaDao.update(tarea);
     }
 
     public void deleteTarea(Tarea tarea) {
-
         tareaDao.delete(tarea);
     }
 }

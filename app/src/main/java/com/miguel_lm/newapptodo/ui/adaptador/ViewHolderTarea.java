@@ -29,9 +29,10 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
     private ImageButton btn_fav_no_activado,btn_fav_activado, btn_elimimnar;
     private CheckBox checkBoxSeleccion;
     private ConstraintLayout constraintLayoutTarea;
+    private TareaLab tareaLab;
 
     static final String COLOR_SELECCIONADO = "#ffff0000";
-    static final String COLOR_NO_SELECCIONADO = "#000000";  //"#FF0000FF"
+    static final String COLOR_NO_SELECCIONADO = "#000000";
 
 
     private ListenerTareas listenerTareas;
@@ -53,53 +54,41 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
 
     public void mostrarTarea(final Tarea tarea, Context context) {
 
-        // Mostrar datos de la tarea
         tv_Tarea_Titulo.setText(tarea.getTitulo());
         tv_Tarea_Fecha.setText(tarea.getFechaTexto());
 
-        // Indicar si es favorita o no
         btn_fav_no_activado.setVisibility(tarea.esFav ? View.INVISIBLE : View.VISIBLE);
         btn_fav_activado.setVisibility(tarea.esFav ? View.VISIBLE : View.INVISIBLE);
 
-        // Indicar si está completada
         checkBoxSeleccion.setOnCheckedChangeListener(null);
         checkBoxSeleccion.setChecked(tarea.isCompletado());
 
-        // Mostrar tarea como seleccionada
         tintBackground(tarea);
 
-
-        //////////////////////////////////////////////////////////////////////////////////
-
-        // Detectar marcar como favorito
-        // Se marca como fav y se actualiza la BD
-        // Se usa el listener para notificar al fragment y resto de fragments que hay que repintar listados
         btn_fav_no_activado.setOnClickListener(v -> {
             btn_fav_no_activado.setVisibility(View.INVISIBLE);
             btn_fav_activado.setVisibility(View.VISIBLE);
 
             tarea.setEsFav(true);
+
             TareaLab.get(context).updateTarea(tarea);
             Toast.makeText(context, "Tarea añadida a Favoritos", Toast.LENGTH_SHORT).show();
 
             listenerTareas.seleccionarTareasFavAdd(tarea);
         });
 
-        // Detectar quitar como favorito
-        // Se desmarca como fav y se actualiza la BD
-        // Se usa el listener para notificar al fragment y resto de fragments que hay que repintar listados
         btn_fav_activado.setOnClickListener(v -> {
             btn_fav_activado.setVisibility(View.INVISIBLE);
             btn_fav_no_activado.setVisibility(View.VISIBLE);
 
             tarea.setEsFav(false);
+
             TareaLab.get(context).updateTarea(tarea);
             Toast.makeText(context, "Tarea eliminada de Favoritos", Toast.LENGTH_SHORT).show();
 
             listenerTareas.seleccionarTareasFavRemove(tarea);
         });
 
-        // Eliminar una tarea
         btn_elimimnar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,12 +108,12 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
             }
         });
 
-        // Recoger tarea seleccionada
         checkBoxSeleccion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 tarea.setCompletado(isChecked);
+
                 TareaLab.get(context).updateTarea(tarea);
                 Toast.makeText(context, isChecked ? "Tarea COMPLETADA" : "Tarea no completada", Toast.LENGTH_SHORT).show();
 

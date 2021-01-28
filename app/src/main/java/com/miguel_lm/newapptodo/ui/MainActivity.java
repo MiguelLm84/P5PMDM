@@ -1,22 +1,18 @@
 package com.miguel_lm.newapptodo.ui;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -32,24 +28,21 @@ import com.miguel_lm.newapptodo.ui.fragments.FragmentTareasFav;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements ListenerTareas {
+public class MainActivity extends AppCompatActivity {
 
     private long tiempoParaSalir = 0;
-    private List<Tarea> listaTareas;
     private Tarea tareaAmodificar;
-    private TareaLab tareaLab;
-
-    // Request para ir a ficha de nueva tarea
     private static final int REQUEST_NUEVA_TAREA = 1234;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -57,36 +50,58 @@ public class MainActivity extends AppCompatActivity implements ListenerTareas {
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_favoritas, R.id.navigation_tareas,  R.id.navigation_completadas)
+                R.id.navigation_favoritas, R.id.navigation_tareas, R.id.navigation_completadas)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        tareaLab = TareaLab.get(this);
-        listaTareas = tareaLab.getTareas();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        TareaLab tareaLab = TareaLab.get(this);
+        List<Tarea> listaTareas = tareaLab.getTareas();
+
+        Date fechaActual = new Date();
+        ArrayList<Tarea> listaTareasFinalizadas = new ArrayList<>();
+
+        for (Tarea tarea : listaTareas) {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            boolean tareaEsCaducada = sdf.format(tarea.getFechaLimite()).compareTo(sdf.format(fechaActual)) < 0;
+
+            if (tareaEsCaducada) {
+                listaTareasFinalizadas.add(tarea);
+            }
+        }
+
+        if (!listaTareasFinalizadas.isEmpty()) {
+            mostrarTareasCaducadas(listaTareasFinalizadas);
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Hay que saber qué activity está volviendo
-        if (requestCode == REQUEST_NUEVA_TAREA   &&   resultCode == RESULT_OK) {
-
-            if (FragmentTareas.FragmentTareasInstance != null)
-                FragmentTareas.FragmentTareasInstance.refrescarListado();
-            if (FragmentTareasFav.FragmentTareasFavInstance != null)
-                FragmentTareasFav.FragmentTareasFavInstance.refrescarListado();
-            if (FragmentTareasCompletadas.FragmentTareasInstanceCompletadas != null)
-                FragmentTareasCompletadas.FragmentTareasInstanceCompletadas.refrescarListado();
+        if (requestCode == REQUEST_NUEVA_TAREA && resultCode == RESULT_OK) {
+            refrescarTodosListados();
         }
-
-
     }
 
-    /** El botón de nueva tarea está centralizado en la ficha principal
-     * Al volver de crear tarea, se deben actualizar los 3 fragments      */
+    private void refrescarTodosListados() {
+
+        if (FragmentTareas.FragmentTareasInstance != null)
+            FragmentTareas.FragmentTareasInstance.refrescarListado();
+        if (FragmentTareasFav.FragmentTareasFavInstance != null)
+            FragmentTareasFav.FragmentTareasFavInstance.refrescarListado();
+        if (FragmentTareasCompletadas.FragmentTareasInstanceCompletadas != null)
+            FragmentTareasCompletadas.FragmentTareasInstanceCompletadas.refrescarListado();
+    }
+
     public void botonNuevaTareaClick(View view) {
 
         Intent intentNuevaTarea = new Intent(this, ActivityTarea.class);
@@ -98,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements ListenerTareas {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_principal, menu);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         return true;
     }
@@ -106,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements ListenerTareas {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         if (item.getItemId() == R.id.accionCrearTarea) {
-            crearTarea();
+            botonNuevaTareaClick(null);
 
         } else if (item.getItemId() == R.id.accionModificar) {
             accionEscogerYModificar();
@@ -117,88 +133,19 @@ public class MainActivity extends AppCompatActivity implements ListenerTareas {
         return super.onOptionsItemSelected(item);
     }
 
-    private void crearTarea() {
-        crearOModificarTarea(null);
-    }
 
     private void crearOModificarTarea(final Tarea tareaAmodificar) {
 
-        AlertDialog.Builder build = new AlertDialog.Builder(this);
-        final View dialogLayout = LayoutInflater.from(this).inflate(R.layout.dialog_crear_tarea, null);
-        build.setView(dialogLayout);
-        final AlertDialog dialog = build.create();
-
-        final EditText edTxtTarea = dialogLayout.findViewById(R.id.edTxt_tarea);
-        final TextView tvFecha = dialogLayout.findViewById(R.id.tv_fecha);
-        final Button buttonAceptar = dialogLayout.findViewById(R.id.btn_aceptar);
-        final Button buttonCancelar = dialogLayout.findViewById(R.id.btn_cancelar);
-
-        final Calendar calendar = Calendar.getInstance();
-
-        if (tareaAmodificar != null) {
-            edTxtTarea.setText(tareaAmodificar.getTitulo());
-            tvFecha.setText(tareaAmodificar.getFechaTexto());
-        }
-
-        tvFecha.setOnClickListener(v -> {
-
-            if (tareaAmodificar != null) {
-                calendar.setTime(tareaAmodificar.getFechaLimite());
-            }
-
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
-            int month = calendar.get(Calendar.MONTH);
-            int year = calendar.get(Calendar.YEAR);
-
-            final DatePickerDialog dpd = new DatePickerDialog(this, (datePicker, year1, monthOfYear, dayOfMonth) -> {
-                calendar.set(Calendar.YEAR, year1);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-                SimpleDateFormat formatoFecha = new SimpleDateFormat("dd MMMM 'de' yyyy", new Locale("es","ES"));
-                tvFecha.setText(formatoFecha.format(calendar.getTime()));
-            }, year, month, day);
-            dpd.show();
-        });
-
-        buttonAceptar.setOnClickListener(v -> {
-
-            String titulo = edTxtTarea.getText().toString();
-
-            if(edTxtTarea.getText().toString().length()<=0){
-                Toast.makeText(getApplicationContext(), "Debe introducir un título", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (tareaAmodificar == null) {
-                Tarea nuevaTarea = new Tarea(titulo, calendar.getTime());
-                tareaLab.get(this).insertTarea(nuevaTarea);
-                //todo: método añadir a BD.
-                listaTareas.add(nuevaTarea);
-
-                Toast.makeText(getApplicationContext(),"tarea añadida a la BD correctamente.",Toast.LENGTH_LONG).show();
-
-                Toast.makeText(getApplicationContext(), "Evento añadido.", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                tareaAmodificar.modificar(titulo, calendar.getTime());
-
-                tareaLab.get(this).updateTarea(tareaAmodificar);
-                //todo: método modificar a BD.
-
-                Toast.makeText(getApplicationContext()," Tarea modificada correctamente en la BD.",Toast.LENGTH_LONG).show();
-
-                Toast.makeText(getApplicationContext(), "Evento modificado.", Toast.LENGTH_SHORT).show();
-            }
-            dialog.dismiss();
-        });
-
-        buttonCancelar.setOnClickListener(v -> dialog.dismiss());
-
-        dialog.show();
+        Intent intentNuevaTarea = new Intent(this, ActivityTarea.class);
+        intentNuevaTarea.putExtra(ActivityTarea.PARAM_TAREA_EDITAR, tareaAmodificar);
+        startActivityForResult(intentNuevaTarea, REQUEST_NUEVA_TAREA);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private void accionEscogerYModificar() {
+
+        TareaLab tareaLab = TareaLab.get(this);
+        List<Tarea> listaTareas = tareaLab.getTareas();
 
         AlertDialog.Builder builderDialogEscogerTareas = new AlertDialog.Builder(this);
         builderDialogEscogerTareas.setIcon(R.drawable.editartarea2);
@@ -213,8 +160,7 @@ public class MainActivity extends AppCompatActivity implements ListenerTareas {
 
             if (tareaAmodificar == null) {
                 Toast.makeText(getApplicationContext(), "Debe escoger una tarea", Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
                 crearOModificarTarea(tareaAmodificar);
             }
         });
@@ -224,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements ListenerTareas {
 
     private void accionEscogerYEliminar() {
 
+        TareaLab tareaLab = TareaLab.get(this);
+        List<Tarea> listaTareas = tareaLab.getTareas();
+
         AlertDialog.Builder builderEliminar = new AlertDialog.Builder(this);
         builderEliminar.setIcon(R.drawable.eliminar);
         builderEliminar.setTitle("Eliminar elementos");
@@ -231,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements ListenerTareas {
         final ArrayList<String> listaTareasAeliminar = new ArrayList<>();
         String[] arrayTareas = new String[listaTareas.size()];
         final boolean[] tareasSeleccionadas = new boolean[listaTareas.size()];
-        for (int i = 0; i < listaTareas.size(); i++){
+        for (int i = 0; i < listaTareas.size(); i++) {
             arrayTareas[i] = "\n· TAREA: " + listaTareas.get(i).getTitulo() + "\n· FECHA:  " + listaTareas.get(i).getFechaTextoCorta();
         }
         builderEliminar.setMultiChoiceItems(arrayTareas, tareasSeleccionadas, (dialog, indiceSeleccionado, isChecked) -> {
@@ -246,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements ListenerTareas {
             builderEliminar_Confirmar.setIcon(R.drawable.exclamation);
             builderEliminar_Confirmar.setTitle("¿Eliminar los elementos?");
             String tareasPorBorra = null;
-            for(int i=0;i<listaTareasAeliminar.size();i++){
+            for (int i = 0; i < listaTareasAeliminar.size(); i++) {
                 tareasPorBorra = listaTareasAeliminar.get(i);
             }
             builderEliminar_Confirmar.setMessage(tareasPorBorra);
@@ -257,27 +206,26 @@ public class MainActivity extends AppCompatActivity implements ListenerTareas {
                     if (tareasSeleccionadas[i]) {
                         listaTareas.remove(i);
                         tareaLab.get(this).deleteTarea(listaTareas.get(i));
-                        //todo: método eliminar en la BD.
                     }
                 }
-                Toast.makeText(getApplicationContext(),"Tareas eliminadas correctamente en la BD.",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Tareas eliminadas correctamente en la BD.", Toast.LENGTH_LONG).show();
                 Toast.makeText(getApplicationContext(), "Tareas eliminadas correctamente.", Toast.LENGTH_SHORT).show();
             });
             builderEliminar_Confirmar.create().show();
             dialog.dismiss();
         });
 
-        builderEliminar.setNegativeButton("Cancelar",null);
+        builderEliminar.setNegativeButton("Cancelar", null);
         builderEliminar.create().show();
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        return Navigation.findNavController(this,R.id.nav_host_fragment).navigateUp();
+        return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp();
     }
 
     @Override
-    public void onBackPressed(){
+    public void onBackPressed() {
 
         long tiempo = System.currentTimeMillis();
         if (tiempo - tiempoParaSalir > 3000) {
@@ -290,28 +238,50 @@ public class MainActivity extends AppCompatActivity implements ListenerTareas {
         }
     }
 
-    @Override
-    public void seleccionarTarea(Tarea tarea) {
+    private void mostrarTareasCaducadas(final List<Tarea> listaTareasFinalizadas) {
 
-    }
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.eliminar);
+        builder.setTitle("Tareas Finalizadas");
 
-    @Override
-    public void eliminarTarea(Tarea tarea) {
+        String listaTareasParaBorrar = null;
 
-    }
+        String[] arrayTareas = new String[listaTareasFinalizadas.size()];
+        final boolean[] tareasSeleccionadas = new boolean[listaTareasFinalizadas.size()];
+        for (int i = 0; i < listaTareasFinalizadas.size(); i++) {
+            arrayTareas[i] = "\n· TAREA: " + listaTareasFinalizadas.get(i).getTitulo() + "\n· FECHA:  " + listaTareasFinalizadas.get(i).getFechaTextoCorta();
+            listaTareasParaBorrar = arrayTareas[i];
+        }
+        builder.setMultiChoiceItems(arrayTareas, tareasSeleccionadas, (dialog, i, isChecked) -> tareasSeleccionadas[i] = isChecked);
 
-    @Override
-    public void seleccionarTareasFavAdd(Tarea tarea) {
+        final String finalListaTareasParaBorrar = listaTareasParaBorrar;
+        builder.setPositiveButton("Borrar", (dialog, which) -> {
 
-    }
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setIcon(R.drawable.eliminar);
+            builder1.setTitle("¿Eliminar el elemento?");
+            builder1.setMessage(finalListaTareasParaBorrar);
 
-    @Override
-    public void seleccionarTareasFavRemove(Tarea tarea) {
+            AlertDialog.Builder builderEliminar_Confirmar = new AlertDialog.Builder(this);
+            builderEliminar_Confirmar.setIcon(R.drawable.exclamation);
+            builderEliminar_Confirmar.setMessage("¿Eliminar los elementos?");
+            builderEliminar_Confirmar.setNegativeButton("Cancelar", null);
+            builderEliminar_Confirmar.setPositiveButton("Borrar", (dialogInterface, which1) -> {
 
-    }
+                TareaLab tareaLab = TareaLab.get(this);
 
-    @Override
-    public void completarTarea(Tarea tarea, boolean completada) {
+                for (int i = listaTareasFinalizadas.size() - 1; i >= 0; i--) {
+                    if (tareasSeleccionadas[i]) {
+                        tareaLab.get(this).deleteTarea(listaTareasFinalizadas.get(i));
+                    }
+                }
+                Toast.makeText(this, "Tareas eliminadas correctamente", Toast.LENGTH_SHORT).show();
 
+                refrescarTodosListados();
+            });
+            builderEliminar_Confirmar.create().show();
+        });
+        builder.setNegativeButton("Cancelar", null);
+        builder.create().show();
     }
 }
