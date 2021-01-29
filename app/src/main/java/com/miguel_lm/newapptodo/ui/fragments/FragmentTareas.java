@@ -24,6 +24,7 @@ import com.miguel_lm.newapptodo.ui.ListenerTareas;
 import com.miguel_lm.newapptodo.ui.adaptador.AdapterTareas;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -58,7 +59,8 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         imageButtonModificarTarea = root.findViewById(R.id.btn_modificar);
 
         tareaLab = TareaLab.get(getContext());
-        listaTareas = tareaLab.getTareasNoFavNoCaducadas();
+        listaTareas = tareaLab.getTareasNoCaducadas();
+        Collections.sort(listaTareas);
 
         RecyclerView recyclerViewTareas = root.findViewById(R.id.recyclerViewTareas);
         recyclerViewTareas.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -101,7 +103,7 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
 
         listaTareasSeleccionadas.clear();
         mostrarToolbar();
-        adapterTareas.actualizarListado(TareaLab.get(getContext()).getTareasNoFavNoCaducadas());
+        adapterTareas.actualizarListado(TareaLab.get(getContext()).getTareasNoCaducadas());
     }
 
     @Override
@@ -227,5 +229,15 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         toolBar.setVisibility(View.GONE);
         adapterTareas.notifyDataSetChanged();
         Toast.makeText(getContext(), "Salir sin seleccionar", Toast.LENGTH_SHORT).show();
+    }
+
+    public void ordenarPorFechas(Tarea tarea){
+
+        TareaLab tareaLab = TareaLab.get(getContext());
+        List<Tarea> listaDeTareas = tareaLab.getTareas();
+
+        Collections.sort(listaDeTareas);
+
+        //todo: IMPORTANTE, cambiar color de fondo a los que estén en la lista de fav y al mismo tiempo estén completadas.
     }
 }

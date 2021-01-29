@@ -14,15 +14,17 @@
         <action
             android:id="@+id/action_navigation_favoritas_to_navigation_completadas"
             app:destination="@id/navigation_completadas"
-            app:enterAnim="@anim/fragment_open_enter"
-            app:exitAnim="@anim/fragment_open_exit" />
+            app:enterAnim="@anim/left_in"
+            app:exitAnim="@anim/left_out"
+            app:popEnterAnim="@anim/left_in"
+            app:popExitAnim="@anim/left_out" />
         <action
             android:id="@+id/action_navigation_favoritas_to_navigation_tareas"
             app:destination="@id/navigation_tareas"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/slide_up"
-            app:popExitAnim="@anim/slide_off" />
+            app:enterAnim="@anim/left_in"
+            app:exitAnim="@anim/left_out"
+            app:popEnterAnim="@anim/left_in"
+            app:popExitAnim="@anim/left_out" />
     </fragment>
 
     <fragment
@@ -33,15 +35,17 @@
         <action
             android:id="@+id/action_navigation_tareas_to_navigation_favoritas"
             app:destination="@id/navigation_favoritas"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/slide_up"
-            app:popExitAnim="@anim/slide_off" />
+            app:enterAnim="@anim/right_in"
+            app:exitAnim="@anim/right_out"
+            app:popEnterAnim="@anim/right_in"
+            app:popExitAnim="@anim/right_out" />
         <action
             android:id="@+id/action_navigation_tareas_to_navigation_completadas"
             app:destination="@id/navigation_completadas"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit" />
+            app:enterAnim="@anim/right_in"
+            app:exitAnim="@anim/right_out"
+            app:popEnterAnim="@anim/right_in"
+            app:popExitAnim="@anim/right_out" />
     </fragment>
 
     <fragment
@@ -52,12 +56,16 @@
         <action
             android:id="@+id/action_navigation_completadas_to_navigation_favoritas"
             app:destination="@id/navigation_favoritas"
-            app:enterAnim="@anim/zoom_back_in"
-            app:exitAnim="@anim/zoom_back" />
+            app:enterAnim="@anim/left_in"
+            app:exitAnim="@anim/left_out"
+            app:popEnterAnim="@anim/left_in"
+            app:popExitAnim="@anim/left_out" />
         <action
             android:id="@+id/action_navigation_completadas_to_navigation_tareas2"
             app:destination="@id/navigation_tareas"
-            app:enterAnim="@anim/fragment_fade_enter"
-            app:exitAnim="@anim/fragment_fade_exit" />
+            app:enterAnim="@anim/left_in"
+            app:exitAnim="@anim/left_out"
+            app:popEnterAnim="@anim/left_in"
+            app:popExitAnim="@anim/left_out" />
     </fragment>
 </navigation>

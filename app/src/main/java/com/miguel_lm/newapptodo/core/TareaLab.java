@@ -31,9 +31,10 @@ public class TareaLab {
         return tareaDao.getTareas();
     }
 
-    public List<Tarea> getTareasNoFavNoCaducadas() {
-        return tareaDao.getTareasNoFavNoCaducadas();
+    public List<Tarea> getTareasNoCaducadas() {
+        return tareaDao.getTareasNoCaducadas();
     }
+
 
     public List<Tarea> getTareasFavoritas() {
         return tareaDao.getTareasFavoritas();

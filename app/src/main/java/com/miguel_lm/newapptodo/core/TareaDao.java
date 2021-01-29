@@ -15,13 +15,13 @@ public interface TareaDao {
     List<Tarea> getTareas();
 
 
-    @Query("SELECT * FROM tarea WHERE esFav = 0   AND   completado = 0")
-    List<Tarea> getTareasNoFavNoCaducadas();
+    @Query("SELECT * FROM tarea WHERE completado = 0 ORDER BY fechaLimite")
+    List<Tarea> getTareasNoCaducadas();
 
-    @Query("SELECT * FROM tarea WHERE esFav = 1")
+    @Query("SELECT * FROM tarea WHERE esFav = 1 ORDER BY fechaLimite")
     List<Tarea> getTareasFavoritas();
 
-    @Query("SELECT * FROM tarea WHERE completado = 1")
+    @Query("SELECT * FROM tarea WHERE completado = 1 ORDER BY fechaLimite")
     List<Tarea> getTareasCaducadas();
 
     @Insert

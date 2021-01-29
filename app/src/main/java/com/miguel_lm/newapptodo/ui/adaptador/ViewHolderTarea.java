@@ -33,6 +33,7 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
 
     static final String COLOR_SELECCIONADO = "#ffff0000";
     static final String COLOR_NO_SELECCIONADO = "#000000";
+    static final String COLOR_COMPLETADO = "#AD686868";   //"#ff34495E";  //"#ff5D6D7E";  //"#ff99A3A4";
 
 
     private ListenerTareas listenerTareas;
@@ -70,6 +71,8 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
             btn_fav_activado.setVisibility(View.VISIBLE);
 
             tarea.setEsFav(true);
+
+            //todo: comparar sí además de FAV es COMPLETADA, sí es así, se deberían mostrar en las 3 listas.
 
             TareaLab.get(context).updateTarea(tarea);
             Toast.makeText(context, "Tarea añadida a Favoritos", Toast.LENGTH_SHORT).show();
@@ -113,7 +116,6 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 tarea.setCompletado(isChecked);
-
                 TareaLab.get(context).updateTarea(tarea);
                 Toast.makeText(context, isChecked ? "Tarea COMPLETADA" : "Tarea no completada", Toast.LENGTH_SHORT).show();
 
@@ -133,8 +135,14 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
     }
 
     private void tintBackground(Tarea tarea) {
-        int color = Color.parseColor(tarea.isTareaSeleccionada() ? COLOR_SELECCIONADO : COLOR_NO_SELECCIONADO);
+        int color;
+        if (tarea.isTareaSeleccionada())
+            color = Color.parseColor(COLOR_SELECCIONADO);
+        else if (tarea.isCompletado())
+            color = Color.parseColor(COLOR_COMPLETADO);
+        else
+            color = Color.parseColor(COLOR_NO_SELECCIONADO);
+
         constraintLayoutTarea.setBackgroundTintList(ColorStateList.valueOf(color));
     }
-
 }

@@ -8,10 +8,11 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 @Entity(tableName = "Tarea")
-public class Tarea implements Serializable {
+public class Tarea implements Serializable, Comparable<Tarea> {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -109,5 +110,17 @@ public class Tarea implements Serializable {
 
     public void setTareaSeleccionada(boolean tareaSeleccionada) {
         this.tareaSeleccionada = tareaSeleccionada;
+    }
+
+    @Override
+    public int compareTo(Tarea tarea) {
+
+        if(tarea.fechaLimite.compareTo(fechaLimite)< 0){
+            return -1;
+        } else if(tarea.fechaLimite.compareTo(fechaLimite)< 0){
+            return 0;
+        } else{
+            return 1;
+        }
     }
 }
