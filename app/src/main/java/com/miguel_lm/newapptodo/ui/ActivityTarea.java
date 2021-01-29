@@ -40,6 +40,7 @@ public class ActivityTarea extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.to_do__2_);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
 
         tareaLab = TareaLab.get(this);
         listaTareas = tareaLab.getTareas();
@@ -55,11 +56,15 @@ public class ActivityTarea extends AppCompatActivity {
         if (activityTareaModo == ActivityTareaModo.editar) {
             fechaLimiteSeleccionada = tareaEditar.fechaLimite;
             mostrarTarea();
-            tv_tituloNuevaTarea.setText("Modificar tarea");
+            tv_tituloNuevaTarea.setText("Modificar Tarea");
+            Toast.makeText(getApplicationContext(),"Modificar tarea existente.",Toast.LENGTH_SHORT).show();
+            overridePendingTransition(R.anim.left_in, R.anim.left_out);
         }
         else {
             fechaLimiteSeleccionada = new Date();
-            tv_tituloNuevaTarea.setText("Nueva tarea");
+            tv_tituloNuevaTarea.setText("Nueva Tarea");
+            Toast.makeText(getApplicationContext(),"Crear una nueva tarea.",Toast.LENGTH_SHORT).show();
+            overridePendingTransition(R.anim.left_in, R.anim.left_out);
         }
         mostrarFecha();
     }
@@ -99,7 +104,8 @@ public class ActivityTarea extends AppCompatActivity {
     public void buttonCancelarClick(View view) {
         setResult(RESULT_CANCELED);
         finish();
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        Toast.makeText(getApplicationContext(),"Ha salido sin realizar ninguna acción.",Toast.LENGTH_SHORT).show();
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
     public void buttonOkClick(View view) {
@@ -108,7 +114,7 @@ public class ActivityTarea extends AppCompatActivity {
         String fecha = textViewTareaFechaLimite.getText().toString();
 
         if (titulo.isEmpty()) {
-            Toast.makeText(this, "Título está en blanco", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "El título no puede estar en blanco", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -118,7 +124,7 @@ public class ActivityTarea extends AppCompatActivity {
             tareaLab.insertTarea(nuevaTarea);
             listaTareas.add(nuevaTarea);
 
-            Toast.makeText(getApplicationContext(),"tarea añadida a la BD correctamente.",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Tarea añadida a la BD correctamente.",Toast.LENGTH_SHORT).show();
 
             Toast.makeText(this, "Evento añadido.", Toast.LENGTH_SHORT).show();
         }
@@ -127,11 +133,12 @@ public class ActivityTarea extends AppCompatActivity {
             tareaEditar.setTareaSeleccionada(false);
             tareaEditar.modificar(titulo, fechaLimiteSeleccionada);
             tareaLab.updateTarea(tareaEditar);
+            Toast.makeText(getApplicationContext(),"Tarea modificada correctamente.",Toast.LENGTH_SHORT).show();
         }
 
         setResult(RESULT_OK);
         finish();
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
     @Override
@@ -144,7 +151,7 @@ public class ActivityTarea extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         } else {
             super.onBackPressed();
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            overridePendingTransition(R.anim.right_in, R.anim.right_out);
         }
     }
 }

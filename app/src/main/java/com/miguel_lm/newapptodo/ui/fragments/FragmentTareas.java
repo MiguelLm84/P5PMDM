@@ -195,12 +195,13 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
                 for (int i = 0; i < listaTareasSeleccionadas.size(); i++) {
                     if (tareasSeleccionadasParaBorrar[i]) {
                         tareaLab.get(getContext()).deleteTarea(listaTareasSeleccionadas.get(i));
-                        eliminarTarea(listaTareasSeleccionadas.get(i));
                         onClickToolbarSalir();
                         return;
                     }
                 }
+                listaTareasSeleccionadas.clear();
                 Toast.makeText(getContext(), "Tareas eliminadas correctamente", Toast.LENGTH_SHORT).show();
+                refrescarListado();
 
             });
             builderEliminar_Confirmar.create().show();

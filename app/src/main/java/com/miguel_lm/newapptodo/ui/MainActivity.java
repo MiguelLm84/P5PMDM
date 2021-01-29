@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -40,13 +39,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
-        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setIcon(R.drawable.to_do__2_);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -106,14 +105,15 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intentNuevaTarea = new Intent(this, ActivityTarea.class);
         startActivityForResult(intentNuevaTarea, REQUEST_NUEVA_TAREA);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        //overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_principal, menu);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
 
         return true;
     }
@@ -194,11 +194,18 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder builderEliminar_Confirmar = new AlertDialog.Builder(this);
             builderEliminar_Confirmar.setIcon(R.drawable.exclamation);
             builderEliminar_Confirmar.setTitle("¿Eliminar los elementos?");
-            String tareasPorBorra = null;
-            for (int i = 0; i < listaTareasAeliminar.size(); i++) {
-                tareasPorBorra = listaTareasAeliminar.get(i);
+            String tareasPorBorrar = null;
+
+            if(listaTareasAeliminar.isEmpty()){
+                Toast.makeText(getApplicationContext(), "Debe escoger una tarea", Toast.LENGTH_SHORT).show();
+                accionEscogerYEliminar();
+                return;
             }
-            builderEliminar_Confirmar.setMessage(tareasPorBorra);
+
+            for (int i = 0; i < listaTareasAeliminar.size(); i++) {
+                tareasPorBorrar = listaTareasAeliminar.get(i);
+            }
+            builderEliminar_Confirmar.setMessage(tareasPorBorrar);
             builderEliminar_Confirmar.setNegativeButton("Cancelar", null);
             builderEliminar_Confirmar.setPositiveButton("Borrar", (dialogInterface, which1) -> {
 
@@ -208,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
                         tareaLab.get(this).deleteTarea(listaTareas.get(i));
                     }
                 }
-                Toast.makeText(getApplicationContext(), "Tareas eliminadas correctamente en la BD.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Tareas eliminadas correctamente en la BD.", Toast.LENGTH_SHORT).show();
                 Toast.makeText(getApplicationContext(), "Tareas eliminadas correctamente.", Toast.LENGTH_SHORT).show();
             });
             builderEliminar_Confirmar.create().show();
@@ -234,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
         } else {
             super.onBackPressed();
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            overridePendingTransition(R.anim.right_in, R.anim.right_out);
         }
     }
 

@@ -192,9 +192,7 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
                     }
                 }
                 listaTareasSeleccionadas.clear();
-
                 Toast.makeText(getContext(), "Tareas eliminadas correctamente", Toast.LENGTH_SHORT).show();
-
                 refrescarListado();
             });
             builderEliminar_Confirmar.create().show();
