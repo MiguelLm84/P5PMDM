@@ -33,7 +33,7 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
 
     static final String COLOR_SELECCIONADO = "#ffff0000";
     static final String COLOR_NO_SELECCIONADO = "#000000";
-    static final String COLOR_COMPLETADO = "#AD686868";   //"#ff34495E";  //"#ff5D6D7E";  //"#ff99A3A4";
+    static final String COLOR_COMPLETADO = "#AD686868";
 
 
     private ListenerTareas listenerTareas;
@@ -71,8 +71,6 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
             btn_fav_activado.setVisibility(View.VISIBLE);
 
             tarea.setEsFav(true);
-
-            //todo: comparar sí además de FAV es COMPLETADA, sí es así, se deberían mostrar en las 3 listas.
 
             TareaLab.get(context).updateTarea(tarea);
             Toast.makeText(context, "Tarea añadida a Favoritos", Toast.LENGTH_SHORT).show();
