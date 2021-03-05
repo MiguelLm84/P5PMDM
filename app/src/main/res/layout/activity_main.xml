@@ -10,8 +10,8 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="0dp"
-        android:layout_height="65dp"
-        android:background="@drawable/fondonegro3d"
+        android:layout_height="52dp"
+        app:itemBackground="@color/colorOnPrimary"
         app:itemIconTint="#FFFFFF"
         app:itemTextColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -29,8 +29,10 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         app:navGraph="@navigation/mobile_navigation" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,15 +40,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
-        android:backgroundTint="@color/design_default_color_on_secondary"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="@color/colorPrimary"
         android:clickable="true"
         android:contentDescription="@string/todo"
         android:focusable="true"
         android:onClick="botonNuevaTareaClick"
         app:backgroundTint="#FFFFFF"
+        app:fabSize="auto"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
+        app:rippleColor="#AD1457"
         app:srcCompat="@drawable/add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

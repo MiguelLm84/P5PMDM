@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/accionCrearTarea"
-        android:icon="@drawable/clipboard"
-        android:title="@string/accionCrear_tarea" />
-    <item
-        android:id="@+id/accionModificar"
-        android:icon="@drawable/editartarea2"
-        android:title="@string/accionModificarTarea" />
-    <item
-        android:id="@+id/accionEliminar"
-        android:icon="@drawable/eliminar"
-        android:title="@string/accionEliminarTarea" />
+        android:id="@+id/btnMas"
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        android:title="@string/mas"
+        app:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/accionCrearTarea"
+                android:icon="@drawable/ic_baseline_create_24"
+                android:menuCategory="system"
+                android:title="@string/accionCrear_tarea" />
+            <item
+                android:id="@+id/accionModificar"
+                android:icon="@drawable/ic_edit_button"
+                android:menuCategory="system"
+                android:title="@string/accionModificarTarea" />
+            <item
+                android:id="@+id/accionEliminar"
+                android:icon="@drawable/ic_eliminar__1_"
+                android:menuCategory="system"
+                android:title="@string/accionEliminarTarea" />
+        </menu>
+    </item>
 </menu>

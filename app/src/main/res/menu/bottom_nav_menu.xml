@@ -7,7 +7,7 @@
         android:title="@string/title_tareas" />
     <item
         android:id="@+id/navigation_favoritas"
-        android:icon="@drawable/estrella__1_"
+        android:icon="@drawable/ic_estrella_1_blanco"
         android:title="@string/title_tareas_fav" />
 
     <item

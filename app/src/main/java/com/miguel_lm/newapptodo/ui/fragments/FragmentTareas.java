@@ -16,11 +16,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.miguel_lm.newapptodo.R;
 import com.miguel_lm.newapptodo.core.Tarea;
 import com.miguel_lm.newapptodo.core.TareaLab;
 import com.miguel_lm.newapptodo.ui.ActivityTarea;
 import com.miguel_lm.newapptodo.ui.ListenerTareas;
+import com.miguel_lm.newapptodo.ui.MainActivity;
 import com.miguel_lm.newapptodo.ui.adaptador.AdapterTareas;
 
 import java.util.ArrayList;
@@ -41,14 +43,14 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
     private ImageView imageButtonModificarTarea;
     Tarea tareaAmodificar;
     private static final int REQUEST_EDITAR_TAREA = 1222;
-
+    Snackbar snackbar;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tareas, container, false);
 
         FragmentTareasInstance = this;
-
+        
         toolBar = root.findViewById(R.id.toolbar);
         toolBar.setVisibility(View.GONE);
 
@@ -57,6 +59,8 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         ImageView imageButtonEliminarTarea = root.findViewById(R.id.btn_delete);
         ImageView imageButtonSalirToolbar = root.findViewById(R.id.btn_salir);
         imageButtonModificarTarea = root.findViewById(R.id.btn_modificar);
+
+        snackbar = Snackbar.make(root.findViewById(R.id.CoordinatorLayoutFragTareas), R.string.mensaje, Snackbar.LENGTH_SHORT);
 
         tareaLab = TareaLab.get(getContext());
         listaTareas = tareaLab.getTareasNoCaducadas();
@@ -154,7 +158,7 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
     public void onClickToolbarEliminar() {
 
         AlertDialog.Builder builderEliminar = new AlertDialog.Builder(getContext());
-        builderEliminar.setIcon(R.drawable.eliminar);
+        builderEliminar.setIcon(R.drawable.eliminar__1_);
         builderEliminar.setTitle("Eliminar elementos");
 
         String[] arrayTareas = new String[listaTareasSeleccionadas.size()];
@@ -190,22 +194,29 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
                 textoNombresTareas += listaTareasAeliminar.get(i);
             }
 
-            builderEliminar_Confirmar.setMessage(textoNombresTareas);
-            builderEliminar_Confirmar.setNegativeButton("Cancelar", null);
-            builderEliminar_Confirmar.setPositiveButton("Borrar", (dialogInterface, which1) -> {
-
-                for (int i = 0; i < listaTareasSeleccionadas.size(); i++) {
-                    if (tareasSeleccionadasParaBorrar[i]) {
-                        tareaLab.get(getContext()).deleteTarea(listaTareasSeleccionadas.get(i));
-                        onClickToolbarSalir();
-                        return;
-                    }
+            for (int i = 0; i < listaTareasSeleccionadas.size(); i++) {
+                if (tareasSeleccionadasParaBorrar[i]) {
+                    Tarea tareaAborrar = listaTareasSeleccionadas.get(i);
+                    tareaLab.get(getContext()).deleteTarea(listaTareasSeleccionadas.get(i));
+                    refrescarListado();
+                    snackbar.setAction(R.string.undo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            listaTareasSeleccionadas.add(tareaAborrar);
+                            tareaLab.get(getContext()).insertTarea(tareaAborrar);
+                            //refrescarListado();
+                            listaTareasSeleccionadas.clear();
+                            adapterTareas.actualizarListado(TareaLab.get(getContext()).getTareasNoCaducadas());
+                            onClickToolbarSalir();
+                        }
+                    });
+                    snackbar.show();
+                    onClickToolbarSalir();
+                    return;
                 }
-                listaTareasSeleccionadas.clear();
-                Toast.makeText(getContext(), "Tareas eliminadas correctamente", Toast.LENGTH_SHORT).show();
-                refrescarListado();
+            }
+            listaTareasSeleccionadas.clear();
 
-            });
             builderEliminar_Confirmar.create().show();
             dialog.dismiss();
         });
@@ -228,7 +239,7 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         listaTareasSeleccionadas.clear();
         toolBar.setVisibility(View.GONE);
         adapterTareas.notifyDataSetChanged();
-        Toast.makeText(getContext(), "Salir sin seleccionar", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "Salir sin seleccionar", Toast.LENGTH_SHORT).show();
     }
 
     public void ordenarPorFechas(Tarea tarea){

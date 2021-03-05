@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayoutTarea"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondoblanco3d_5"
-    android:backgroundTint="#575656"
-    android:orientation="vertical">
+    android:background="#FFFFFF"
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/titulo_tareaNueva"
@@ -16,9 +16,9 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         android:autofillHints=""
-        android:background="#020202"
+        android:background="@drawable/shape_splash"
         android:ems="10"
-        android:fontFamily="@font/arbutus"
+        android:fontFamily="@font/russo_one"
         android:foregroundTint="#2196F3"
         android:inputType="none"
         android:shadowColor="#FFFFFF"
@@ -38,7 +38,7 @@
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/russo_one"
         android:text="@string/tv_titulo_nom_tarea"
-        android:textColor="#FFFFFF"
+        android:textColor="#020202"
         android:textSize="18sp" />
 
     <EditText
@@ -54,7 +54,7 @@
         android:hint="@string/tv_nombre_tarea"
         android:inputType="text"
         android:maxLength="25"
-        android:textColor="#00B0FF"
+        android:textColor="#B32602"
         android:textSize="16sp" />
 
     <TextView
@@ -66,7 +66,7 @@
         android:layout_marginBottom="8dp"
         android:fontFamily="@font/russo_one"
         android:text="@string/Fecha"
-        android:textColor="#FFFFFF"
+        android:textColor="#020202"
         android:textSize="18sp" />
 
     <TextView
@@ -83,7 +83,7 @@
         android:hint="@string/tv_fecha_nueva"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:textColor="#00B0FF"
+        android:textColor="#B32602"
         android:textSize="16sp" />
 
     <LinearLayout
@@ -98,28 +98,33 @@
             android:id="@+id/btn_cancelar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="6dp"
             android:layout_weight="1"
-            android:backgroundTint="@android:color/holo_red_light"
+            android:background="@drawable/shape_boton_redondeado"
             android:fontFamily="@font/russo_one"
             android:onClick="onClickButtonCancelar"
             android:text="@string/btn_cancelar"
-            android:textColor="#FFFFFF"
+            android:textColor="#020202"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/btn_aceptar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="32dp"
             android:layout_weight="1"
-            android:backgroundTint="@android:color/holo_green_light"
+            android:background="@drawable/shape_boton_redondeado_verde"
             android:fontFamily="@font/russo_one"
             android:onClick="onClickButtonAceptar"
             android:text="@string/btn_aceptar"
-            android:textColor="#FFFFFF"
+            android:textColor="#020202"
             android:textSize="14sp"
             tools:ignore="ButtonStyle" />
 
     </LinearLayout>
-
 </LinearLayout>

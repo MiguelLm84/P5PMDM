@@ -30,8 +30,9 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
     private CheckBox checkBoxSeleccion;
     private ConstraintLayout constraintLayoutTarea;
     private TareaLab tareaLab;
+    private TextView textViewPosicion;
 
-    static final String COLOR_SELECCIONADO = "#ffff0000";
+    static final String COLOR_SELECCIONADO = "#ffff0000";  //"#E30425";
     static final String COLOR_NO_SELECCIONADO = "#000000";
     static final String COLOR_COMPLETADO = "#AD686868";
 
@@ -51,12 +52,14 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
         btn_elimimnar = itemView.findViewById(R.id.btn_eliminar);
         checkBoxSeleccion = itemView.findViewById(R.id.checkBoxSeleccion);
         constraintLayoutTarea = itemView.findViewById(R.id.constraintLayoutTarea);
+        textViewPosicion = itemView.findViewById(R.id.textViewPosicion);
     }
 
     public void mostrarTarea(final Tarea tarea, Context context) {
 
         tv_Tarea_Titulo.setText(tarea.getTitulo());
         tv_Tarea_Fecha.setText(tarea.getFechaTexto());
+        textViewPosicion.setText("lat: " + String.format("%.4f", tarea.latitud) + ",   long: " + String.format("%.4f", tarea.longitud));
 
         btn_fav_no_activado.setVisibility(tarea.esFav ? View.INVISIBLE : View.VISIBLE);
         btn_fav_activado.setVisibility(tarea.esFav ? View.VISIBLE : View.INVISIBLE);

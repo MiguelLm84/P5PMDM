@@ -18,29 +18,37 @@ public class Tarea implements Serializable, Comparable<Tarea> {
     @NonNull
     public int mId;
 
-    @ColumnInfo(name="titulo")
+    @ColumnInfo(name = "titulo")
     public String titulo;
 
-    @ColumnInfo(name="fechaCreacion")
+    @ColumnInfo(name = "fechaCreacion")
     public Date fechaCreacion;
 
-    @ColumnInfo(name="esFav")
+    @ColumnInfo(name = "esFav")
     public boolean esFav;
 
-    @ColumnInfo(name="completado")
+    @ColumnInfo(name = "completado")
     public boolean completado;
 
-    @ColumnInfo(name="fechaLimite")
+    @ColumnInfo(name = "fechaLimite")
     public Date fechaLimite;
+
+    @ColumnInfo(name = "latitud")
+    public double latitud;
+
+    @ColumnInfo(name = "longitud")
+    public double longitud;
 
     private boolean tareaSeleccionada;
 
-    public Tarea(String titulo, Date fechaLimite) {
+    public Tarea(String titulo, Date fechaLimite, double latitud, double longitud) {
         this.titulo = titulo;
         this.fechaCreacion = new Date();
         this.esFav = false;
         this.completado = false;
         this.fechaLimite = fechaLimite;
+        this.latitud = latitud;
+        this.longitud = longitud;
         tareaSeleccionada = false;
         mId = 0;
     }
@@ -81,8 +89,24 @@ public class Tarea implements Serializable, Comparable<Tarea> {
         return fechaCreacion;
     }
 
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
+    }
+
     public String getFechaTexto() {
-        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd MMMM 'de' yyyy ", Locale.getDefault());
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd MMMM 'de' yyyy   hh:mm", Locale.getDefault());
         return formatoFecha.format(fechaLimite);
     }
 
@@ -95,8 +119,8 @@ public class Tarea implements Serializable, Comparable<Tarea> {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public String toStringTarea(){
-        return "\n· TITULO: "+getTitulo()+"\n\n· FECHA: "+getFechaTexto();
+    public String toStringTarea() {
+        return "\n· TITULO: " + getTitulo() + "\n\n· FECHA: " + getFechaTexto();
     }
 
     public void modificar(String titulo, Date fecha) {
@@ -115,11 +139,11 @@ public class Tarea implements Serializable, Comparable<Tarea> {
     @Override
     public int compareTo(Tarea tarea) {
 
-        if(tarea.fechaLimite.compareTo(fechaLimite)< 0){
+        if (tarea.fechaLimite.compareTo(fechaLimite) < 0) {
             return -1;
-        } else if(tarea.fechaLimite.compareTo(fechaLimite)< 0){
+        } else if (tarea.fechaLimite.compareTo(fechaLimite) < 0) {
             return 0;
-        } else{
+        } else {
             return 1;
         }
     }

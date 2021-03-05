@@ -1,114 +1,263 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/CoordinatorLayoutActivityTarea"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondoblanco3d_5"
+    android:background="#FFFFFF"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tv_tituloNuevaTarea"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="24dp"
-        android:background="#020202"
-        android:fontFamily="@font/arbutus"
-        android:text="@string/tv_titulo_nueva_tarea"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="26sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/tv_nomTarea"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="4dp"
-        android:fontFamily="@font/russo_one"
-        android:text="@string/tv_nombre_tarea"
-        android:textColor="#020202"
-        android:textSize="18sp" />
-
-    <EditText
-        android:id="@+id/ed_nomTarea"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="8dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:fontFamily="@font/russo_one"
-        android:hint="@string/tv_nombre_tarea_hint"
-        android:inputType="text"
-        android:textColor="@color/purple_700"
-        android:textColorHint="?android:attr/textColorHint"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/tv_titulo_Fecha"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="4dp"
-        android:fontFamily="@font/russo_one"
-        android:onClick="cambiarFecha"
-        android:text="@string/Fecha"
-        android:textColor="#020202"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/textViewTareaFechaLimite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:fontFamily="@font/russo_one"
-        android:hint="@string/Fecha"
-        android:inputType="date"
-        android:onClick="cambiarFecha"
-        android:textColor="@color/purple_700"
-        android:textSize="16sp"
-        tools:ignore="TextViewEdits" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="24dp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_cancelar"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_tituloNuevaTarea"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:layout_weight="1"
-            android:backgroundTint="@android:color/holo_red_light"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/shape_splash"
             android:fontFamily="@font/russo_one"
-            android:onClick="buttonCancelarClick"
-            android:text="@string/btn_cancelar"
-            android:textSize="14sp"
-            tools:ignore="ButtonStyle" />
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:text="@string/tv_titulo_nueva_tarea"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btn_aceptar"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tv_nomTarea"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:layout_weight="1"
-            android:backgroundTint="@android:color/holo_green_light"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="4dp"
             android:fontFamily="@font/russo_one"
-            android:onClick="buttonOkClick"
-            android:text="@string/btn_aceptar"
-            android:textSize="14sp"
-            tools:ignore="ButtonStyle" />
+            android:text="@string/tv_nombre_tarea"
+            android:textColor="@color/colorPrimaryVariant"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/ed_nomTarea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="8dp"
+            android:autofillHints=""
+            android:ems="10"
+            android:fontFamily="@font/russo_one"
+            android:hint="@string/tv_nombre_tarea_hint"
+            android:inputType="text"
+            android:textColor="@color/magenta"
+            android:textColorHint="#A8A5A5"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_titulo_Fecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/russo_one"
+            android:onClick="cambiarFecha"
+            android:text="@string/Fecha"
+            android:textColor="@color/colorPrimaryVariant"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textViewTareaFechaLimite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/russo_one"
+            android:hint="@string/Fecha"
+            android:inputType="date"
+            android:onClick="cambiarFecha"
+            android:textColor="@color/magenta"
+            android:textColorHint="#A8A5A5"
+            android:textSize="16sp"
+            tools:ignore="TextViewEdits" />
+
+        <TextView
+            android:id="@+id/tv_titulo_Posicion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/russo_one"
+            android:onClick="cambiarFecha"
+            android:text="@string/tv_tituloPosicion"
+            android:textColor="@color/colorPrimaryVariant"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textViewTareaPosicion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/russo_one"
+            android:hint="@string/tv_posicion"
+            android:inputType="date"
+            android:textColor="@color/magenta"
+            android:textColorHint="#A8A5A5"
+            android:textSize="16sp"
+            android:visibility="gone"
+            tools:ignore="TextViewEdits" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp">
+
+            <TextView
+                android:id="@+id/tv_tituloUbicacionActual"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/russo_one"
+                android:text="@string/txt_ubicacion_actual"
+                android:textColor="@color/colorPrimaryVariant"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_tituloAnhadirRecordatorio"
+                app:layout_constraintStart_toEndOf="@+id/imageButtonUbicacionActual"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/imageButtonUbicacionActual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:background="@null"
+                android:contentDescription="@string/todo"
+                android:onClick="anhadirUbicacionActual"
+                app:layout_constraintBottom_toTopOf="@+id/imageButtonAddLocation"
+                app:layout_constraintEnd_toStartOf="@+id/tv_tituloUbicacionActual"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/location_on" />
+
+            <TextView
+                android:id="@+id/tv_tituloAddLocation"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="18dp"
+                android:fontFamily="@font/russo_one"
+                android:gravity="center|start"
+                android:text="@string/tv_tituloAnhadirLocation"
+                android:textColor="@color/colorPrimaryVariant"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/imageButtonAddLocation"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tituloUbicacionActual" />
+
+            <ImageButton
+                android:id="@+id/imageButtonAddLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@null"
+                android:contentDescription="@string/todo"
+                android:onClick="seleccionarPosicionEnMapa"
+                app:layout_constraintBottom_toTopOf="@+id/btn_recordatorio"
+                app:layout_constraintEnd_toStartOf="@+id/tv_tituloAddLocation"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageButtonUbicacionActual"
+                app:srcCompat="@drawable/ic_baseline_add_location_alt_24" />
+
+            <TextView
+                android:id="@+id/tv_tituloAnhadirRecordatorio"
+                android:layout_width="0dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="1dp"
+                android:fontFamily="@font/russo_one"
+                android:gravity="center|start"
+                android:text="@string/tv_anhadir_recordatorio"
+                android:textColor="@color/colorPrimaryVariant"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_recordatorio"
+                app:layout_constraintTop_toBottomOf="@+id/tv_tituloAddLocation" />
+
+            <ImageButton
+                android:id="@+id/btn_recordatorio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="1dp"
+                android:background="@null"
+                android:contentDescription="@string/todo"
+                android:onClick="IntroducirRecordatorio"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_tituloAnhadirRecordatorio"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageButtonAddLocation"
+                app:srcCompat="@drawable/ic_baseline_add_alert_24" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="24dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_cancelar"
+                android:layout_width="10dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_boton_redondeado"
+                android:fontFamily="@font/russo_one"
+                android:onClick="buttonCancelarClick"
+                android:text="@string/btn_cancelar"
+                android:textColor="#020202"
+                android:textSize="14sp"
+                tools:ignore="ButtonStyle" />
+
+            <Button
+                android:id="@+id/btn_aceptar"
+                android:layout_width="10dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/shape_boton_redondeado_verde"
+                android:fontFamily="@font/russo_one"
+                android:onClick="buttonOkClick"
+                android:text="@string/btn_aceptar"
+                android:textColor="#020202"
+                android:textSize="14sp"
+                tools:ignore="ButtonStyle" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

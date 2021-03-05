@@ -9,15 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
-        android:background="@drawable/fondopantallablanco3d_4">
+        android:background="@drawable/fondo_1">
 
         <TextView
             android:id="@+id/tv_tituloSplash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
-            android:background="#020202"
-            android:fontFamily="@font/russo_one"
+            android:layout_marginTop="264dp"
+            android:background="@drawable/shape_splash"
+            android:fontFamily="@font/fugaz_one"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:text="@string/tv_tituloSplash"
@@ -26,24 +26,10 @@
             android:textColor="#FFFFFF"
             android:textSize="36sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/imageView_Splash"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/imageView_Splash"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="156dp"
-            android:contentDescription="@string/todo"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/fondo_splash_tarea" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

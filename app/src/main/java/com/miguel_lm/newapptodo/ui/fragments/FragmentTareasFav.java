@@ -24,6 +24,7 @@ import com.miguel_lm.newapptodo.ui.ListenerTareas;
 import com.miguel_lm.newapptodo.ui.adaptador.AdapterTareas;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -55,6 +56,7 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
 
         tareaLab = TareaLab.get(getContext());
         List<Tarea> listaTareasFav = tareaLab.getTareasFavoritas();
+        Collections.sort(listaTareasFav);
 
         RecyclerView recyclerViewTareasFav = root.findViewById(R.id.recyclerViewTareas);
         recyclerViewTareasFav.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -147,7 +149,7 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
     public void onClickToolbarEliminar() {
 
         AlertDialog.Builder builderEliminar = new AlertDialog.Builder(getContext());
-        builderEliminar.setIcon(R.drawable.eliminar);
+        builderEliminar.setIcon(R.drawable.eliminar__1_);
         builderEliminar.setTitle("Eliminar elementos");
 
         String[] arrayTareas = new String[listaTareasSeleccionadas.size()];
@@ -189,10 +191,11 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
                 for (int i = 0; i < listaTareasSeleccionadas.size(); i++) {
                     if (tareasSeleccionadasParaBorrar[i]) {
                         tareaLab.get(getContext()).deleteTarea(listaTareasSeleccionadas.get(i));
+                        //TODO: Hacer Snackbar
                     }
                 }
                 listaTareasSeleccionadas.clear();
-                Toast.makeText(getContext(), "Tareas eliminadas correctamente", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Tareas eliminadas correctamente", Toast.LENGTH_SHORT).show();
                 refrescarListado();
             });
             builderEliminar_Confirmar.create().show();
@@ -219,6 +222,6 @@ public class FragmentTareasFav extends Fragment implements ListenerTareas {
         listaTareasSeleccionadas.clear();
         toolBar.setVisibility(View.GONE);
         adapterTareasFav.notifyDataSetChanged();
-        Toast.makeText(getContext(), "Salir sin seleccionar", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "Salir sin seleccionar", Toast.LENGTH_SHORT).show();
     }
 }

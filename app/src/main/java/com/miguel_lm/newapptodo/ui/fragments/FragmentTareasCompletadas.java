@@ -24,6 +24,7 @@ import com.miguel_lm.newapptodo.ui.ListenerTareas;
 import com.miguel_lm.newapptodo.ui.adaptador.AdapterTareas;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -55,6 +56,7 @@ public class FragmentTareasCompletadas extends Fragment implements ListenerTarea
 
         tareaLab = TareaLab.get(getContext());
         List<Tarea> listaTareasCompletadas = tareaLab.getTareasCaducadas();
+        Collections.sort(listaTareasCompletadas);
 
         RecyclerView recyclerViewTareasCaducadas = root.findViewById(R.id.recyclerViewTareas);
         recyclerViewTareasCaducadas.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -147,7 +149,7 @@ public class FragmentTareasCompletadas extends Fragment implements ListenerTarea
     public void onClickToolbarEliminar() {
 
         AlertDialog.Builder builderEliminar = new AlertDialog.Builder(getContext());
-        builderEliminar.setIcon(R.drawable.eliminar);
+        builderEliminar.setIcon(R.drawable.eliminar__1_);
         builderEliminar.setTitle("Eliminar elementos");
 
         String[] arrayTareas = new String[listaTareasSeleccionadas.size()];
@@ -189,10 +191,11 @@ public class FragmentTareasCompletadas extends Fragment implements ListenerTarea
                 for (int i = 0; i < listaTareasSeleccionadas.size(); i++) {
                     if (tareasSeleccionadasParaBorrar[i]) {
                         tareaLab.get(getContext()).deleteTarea(listaTareasSeleccionadas.get(i));
+                        //TODO: Hacer Snackbar
                     }
                 }
                 listaTareasSeleccionadas.clear();
-                Toast.makeText(getContext(), "Tareas eliminadas correctamente", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Tareas eliminadas correctamente", Toast.LENGTH_SHORT).show();
                 refrescarListado();
             });
             builderEliminar_Confirmar.create().show();
@@ -218,6 +221,6 @@ public class FragmentTareasCompletadas extends Fragment implements ListenerTarea
         listaTareasSeleccionadas.clear();
         toolBar.setVisibility(View.GONE);
         adapterTareasCompletadas.notifyDataSetChanged();
-        Toast.makeText(getContext(), "Salir sin seleccionar", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(), "Salir sin seleccionar", Toast.LENGTH_SHORT).show();
     }
 }

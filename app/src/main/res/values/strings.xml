@@ -22,4 +22,18 @@
     <string name="tv_tituloSplash">AppToDoList</string>
     <string name="tv_titulo_toolbar">Seleccionar Elementos</string>
     <string name="tv_nombre_tarea_hint">Nombre Tarea</string>
+    <string name="tv_tituloAnhadirLocation">Añadir Localización</string>
+    <string name="tv_posicion">Posición</string>
+    <string name="tv_tituloPosicion">Posición</string>
+    <string name="mensaje"> Esta seguro de eleiminar esta tarea?</string>
+    <string name="undo">UNDO</string>
+    <string name="tv_anhadir_recordatorio">Añadir Recordatorio</string>
+    <string name="txt_anhadir_recordatorio">Añadir Recordatorio</string>
+    <string name="txt_minutos">Minutos</string>
+    <string name="txt_dias">Días</string>
+    <string name="txt_horas">Horas</string>
+    <string name="txt_hint_introducir_un_digito">Introducir un digito</string>
+    <string name="txt_ubicacion_actual">Ubicación Actual</string>
+    <string name="mas">Mas</string>
+    <string name="txt_coordenadas">lat: 00.0000, long:00.0000</string>
 </resources>
