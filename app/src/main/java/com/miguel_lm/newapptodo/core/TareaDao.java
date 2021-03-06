@@ -25,7 +25,7 @@ public interface TareaDao {
     List<Tarea> getTareasCaducadas();
 
     @Insert
-    void insert(Tarea tarea);
+    long insert(Tarea tarea);
 
     @Delete
     void delete(Tarea tarea);

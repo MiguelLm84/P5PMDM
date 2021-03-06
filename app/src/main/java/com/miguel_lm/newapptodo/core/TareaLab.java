@@ -44,8 +44,8 @@ public class TareaLab {
         return tareaDao.getTareasCaducadas();
     }
 
-    public void insertTarea(Tarea tarea) {
-        tareaDao.insert(tarea);
+    public long insertTarea(Tarea tarea) {
+        return tareaDao.insert(tarea);
     }
 
     public void updateTarea(Tarea tarea) {

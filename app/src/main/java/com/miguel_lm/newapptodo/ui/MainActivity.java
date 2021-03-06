@@ -197,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog.Builder builderEliminar_Confirmar = new AlertDialog.Builder(this);
             builderEliminar_Confirmar.setIcon(R.drawable.exclamation);
             builderEliminar_Confirmar.setTitle("¿Eliminar los elementos?");
-            String tareasPorBorrar = null;
 
             if(listaTareasAeliminar.isEmpty()){
                 Toast.makeText(getApplicationContext(), "Debe escoger una tarea", Toast.LENGTH_SHORT).show();
@@ -205,50 +204,33 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            for (int i = 0; i < listaTareasAeliminar.size(); i++) {
-                tareasPorBorrar = listaTareasAeliminar.get(i);
-            }
-
-            for (int i = listaTareas.size() - 1; i >= 0; i--) {
-                if (tareasSeleccionadas[i]) {
-                    Tarea tarea = listaTareas.get(i);
-                    listaTareas.remove(i);
-                    tareaLab.get(this).deleteTarea(listaTareas.get(i));
-                    snackbar.setAction(R.string.undo, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            listaTareas.add(tarea);
-                            tareaLab.get(MainActivity.this).insertTarea(tarea);
-                        }
-                    });
-                    snackbar.show();
+            snackbar.setAction(R.string.undo, null);
+            snackbar.addCallback(new Snackbar.Callback() {
+                @Override
+                public void onShown(Snackbar sb) {
+                    super.onShown(sb);
                 }
-            }
 
+                @Override
+                public void onDismissed(Snackbar transientBottomBar, int event) {
+                    super.onDismissed(transientBottomBar, event);
 
-            /*builderEliminar_Confirmar.setMessage(tareasPorBorrar);
-            builderEliminar_Confirmar.setNegativeButton("Cancelar", null);
-            builderEliminar_Confirmar.setPositiveButton("Borrar", (dialogInterface, which1) -> {
+                    // Se ha pulsado el botón
+                    if (event != DISMISS_EVENT_ACTION)
 
-                for (int i = listaTareas.size() - 1; i >= 0; i--) {
-                    if (tareasSeleccionadas[i]) {
-                        listaTareas.remove(i);
-                        tareaLab.get(this).deleteTarea(listaTareas.get(i));
+                        for (int i = listaTareas.size() - 1; i >= 0; i--) {
+                            if (tareasSeleccionadas[i]) {
+                                listaTareas.remove(i);
+                                tareaLab.get(MainActivity.this).deleteTarea(listaTareas.get(i));
 
-                        Tarea tarea = listaTareas.get(i);
-                        snackbar.setAction(R.string.undo, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                listaTareas.add(tarea);
-                                tareaLab.get(MainActivity.this).insertTarea(tarea);
                             }
-                        });
-                        snackbar.show();
-                    }
+                        }
+
                 }
             });
-            builderEliminar_Confirmar.create().show();
-            dialog.dismiss();*/
+
+            snackbar.show();
+
         });
 
         builderEliminar.setNegativeButton("Cancelar", null);
