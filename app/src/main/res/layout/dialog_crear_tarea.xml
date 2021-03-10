@@ -118,7 +118,7 @@
             android:layout_marginTop="6dp"
             android:layout_marginEnd="32dp"
             android:layout_weight="1"
-            android:background="@drawable/shape_boton_redondeado_verde"
+            android:background="@drawable/shape_boton_redondeado_2"
             android:fontFamily="@font/russo_one"
             android:onClick="onClickButtonAceptar"
             android:text="@string/btn_aceptar"

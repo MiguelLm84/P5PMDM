@@ -172,9 +172,9 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
 
         builderEliminar.setPositiveButton("Borrar", (dialog, which) -> {
 
-            AlertDialog.Builder builderEliminar_Confirmar = new AlertDialog.Builder(getContext());
+            /*AlertDialog.Builder builderEliminar_Confirmar = new AlertDialog.Builder(getContext());
             builderEliminar_Confirmar.setIcon(R.drawable.exclamation);
-            builderEliminar_Confirmar.setTitle("¿Eliminar los elementos?");
+            builderEliminar_Confirmar.setTitle("¿Eliminar los elementos?");*/
             String textoNombresTareas = "";
 
             ArrayList<String> listaTareasAeliminar = new ArrayList<>();
@@ -202,9 +202,9 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
                     snackbar.setAction(R.string.undo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            listaTareasSeleccionadas.add(tareaAborrar);
+                            //listaTareasSeleccionadas.add(tareaAborrar);
                             tareaLab.get(getContext()).insertTarea(tareaAborrar);
-                            //refrescarListado();
+                            refrescarListado();
                             listaTareasSeleccionadas.clear();
                             adapterTareas.actualizarListado(TareaLab.get(getContext()).getTareasNoCaducadas());
                             onClickToolbarSalir();
@@ -216,9 +216,8 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
                 }
             }
             listaTareasSeleccionadas.clear();
-
-            builderEliminar_Confirmar.create().show();
-            dialog.dismiss();
+            //builderEliminar_Confirmar.create().show();
+            //dialog.dismiss();
         });
 
         builderEliminar.setNegativeButton("Cancelar", null);

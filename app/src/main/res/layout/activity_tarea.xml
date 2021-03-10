@@ -49,13 +49,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
-            android:layout_marginBottom="8dp"
             android:autofillHints=""
+            android:background="@null"
             android:ems="10"
             android:fontFamily="@font/russo_one"
             android:hint="@string/tv_nombre_tarea_hint"
             android:inputType="text"
-            android:textColor="@color/magenta"
+            android:textColor="@color/colorSecondary"
             android:textColorHint="#A8A5A5"
             android:textSize="16sp" />
 
@@ -64,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="14dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="4dp"
             android:fontFamily="@font/russo_one"
@@ -83,17 +83,42 @@
             android:hint="@string/Fecha"
             android:inputType="date"
             android:onClick="cambiarFecha"
-            android:textColor="@color/magenta"
+            android:textColor="@color/colorSecondary"
             android:textColorHint="#A8A5A5"
             android:textSize="16sp"
             tools:ignore="TextViewEdits" />
+
+        <TextView
+            android:id="@+id/tv_tituloHora"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/russo_one"
+            android:text="@string/tv_tituloHora"
+            android:textColor="@color/colorPrimaryVariant"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/textViewTareaHoraLimite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/russo_one"
+            android:hint="@string/txt_hora"
+            android:onClick="cambiarHora"
+            android:textColor="@color/colorSecondary"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_titulo_Posicion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="14dp"
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="4dp"
             android:fontFamily="@font/russo_one"
@@ -104,14 +129,14 @@
 
         <TextView
             android:id="@+id/textViewTareaPosicion"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:layout_marginEnd="24dp"
             android:fontFamily="@font/russo_one"
             android:hint="@string/tv_posicion"
             android:inputType="date"
-            android:textColor="@color/magenta"
+            android:textColor="@color/colorSecondary"
             android:textColorHint="#A8A5A5"
             android:textSize="16sp"
             android:visibility="gone"
@@ -121,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="24dp">
 
             <TextView
@@ -207,7 +232,7 @@
                 android:layout_marginBottom="1dp"
                 android:background="@null"
                 android:contentDescription="@string/todo"
-                android:onClick="IntroducirRecordatorio"
+                android:onClick="dialogoRecordatorio"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tv_tituloAnhadirRecordatorio"
                 app:layout_constraintStart_toStartOf="parent"
@@ -250,7 +275,7 @@
                 android:layout_marginEnd="32dp"
                 android:layout_marginBottom="6dp"
                 android:layout_weight="1"
-                android:background="@drawable/shape_boton_redondeado_verde"
+                android:background="@drawable/shape_boton_redondeado_2"
                 android:fontFamily="@font/russo_one"
                 android:onClick="buttonOkClick"
                 android:text="@string/btn_aceptar"

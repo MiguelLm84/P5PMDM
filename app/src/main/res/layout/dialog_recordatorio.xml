@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
-        android:id="@+id/radioGroup2"
+        android:id="@+id/radioGroupRecordatorio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -111,15 +111,15 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="50dp"
-        android:background="@drawable/shape_boton_redondeado_verde"
+        android:background="@drawable/shape_boton_redondeado_2"
         android:fontFamily="@font/russo_one"
-        android:onClick="crearRecordatorio"
+        android:onClick="aceptarDialogoRecordatorio"
         android:text="@string/btn_aceptar"
         android:textColor="#020202"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup2"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupRecordatorio"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
@@ -131,6 +131,7 @@
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="50dp"
         android:background="@drawable/shape_boton_redondeado"
+        android:onClick="cancelarDialogoRecordatorio"
         android:text="@string/btn_cancelar"
         android:textColor="#020202"
         android:textStyle="bold"
@@ -138,7 +139,7 @@
         app:layout_constraintEnd_toStartOf="@+id/btn_aceptar"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/radioGroup2"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroupRecordatorio"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,7 @@ import com.miguel_lm.newapptodo.ui.ListenerTareas;
 
 public class ViewHolderTarea extends RecyclerView.ViewHolder {
 
-    private TextView tv_Tarea_Fecha;
+    private TextView tv_Tarea_Fecha,tv_Tarea_Hora;
     private TextView tv_Tarea_Titulo;
     private CardView cardViewTarea;
     private ImageButton btn_fav_no_activado,btn_fav_activado, btn_elimimnar;
@@ -46,6 +46,7 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
 
         tv_Tarea_Titulo = itemView.findViewById(R.id.tv_tareaNueva);
         tv_Tarea_Fecha = itemView.findViewById(R.id.tv_fechaNueva);
+        tv_Tarea_Hora = itemView.findViewById(R.id.tv_horaNueva);
         cardViewTarea = itemView.findViewById(R.id.CardViewTarea);
         btn_fav_no_activado = itemView.findViewById(R.id.btn_Fav_blanco);
         btn_fav_activado = itemView.findViewById(R.id.btn_Fav_amarillo);
@@ -59,6 +60,7 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
 
         tv_Tarea_Titulo.setText(tarea.getTitulo());
         tv_Tarea_Fecha.setText(tarea.getFechaTexto());
+        tv_Tarea_Hora.setText(tarea.getHoraTexto());
         textViewPosicion.setText("lat: " + String.format("%.4f", tarea.latitud) + ",   long: " + String.format("%.4f", tarea.longitud));
 
         btn_fav_no_activado.setVisibility(tarea.esFav ? View.INVISIBLE : View.VISIBLE);

@@ -3,10 +3,14 @@ package com.miguel_lm.newapptodo.ui;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        snackbar = Snackbar.make(findViewById(R.id.container), R.string.mensaje, Snackbar.LENGTH_SHORT);
-
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setIcon(R.drawable.to_do__2_);
@@ -58,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-
     }
 
     @Override
@@ -184,7 +185,8 @@ public class MainActivity extends AppCompatActivity {
         String[] arrayTareas = new String[listaTareas.size()];
         final boolean[] tareasSeleccionadas = new boolean[listaTareas.size()];
         for (int i = 0; i < listaTareas.size(); i++) {
-            arrayTareas[i] = "\n· TAREA: " + listaTareas.get(i).getTitulo() + "\n· FECHA:  " + listaTareas.get(i).getFechaTextoCorta();
+            arrayTareas[i] = "\n· TAREA: " + listaTareas.get(i).getTitulo() + "\n· FECHA:  " + listaTareas.get(i).getFechaTextoCorta() +
+                    "  " + listaTareas.get(i).getHoraTexto();
         }
         builderEliminar.setMultiChoiceItems(arrayTareas, tareasSeleccionadas, (dialog, indiceSeleccionado, isChecked) -> {
             tareasSeleccionadas[indiceSeleccionado] = isChecked;
@@ -204,8 +206,16 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            snackbar.setAction(R.string.undo, null);
+            snackbar = Snackbar.make(findViewById(R.id.container), R.string.mensaje, Snackbar.LENGTH_SHORT);
+
+            snackbar.setAction(R.string.undo, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
             snackbar.addCallback(new Snackbar.Callback() {
+
                 @Override
                 public void onShown(Snackbar sb) {
                     super.onShown(sb);
@@ -215,22 +225,21 @@ public class MainActivity extends AppCompatActivity {
                 public void onDismissed(Snackbar transientBottomBar, int event) {
                     super.onDismissed(transientBottomBar, event);
 
-                    // Se ha pulsado el botón
-                    if (event != DISMISS_EVENT_ACTION)
+                    // NO Se ha pulsado el botón
+                    if (event != DISMISS_EVENT_ACTION) {
 
                         for (int i = listaTareas.size() - 1; i >= 0; i--) {
                             if (tareasSeleccionadas[i]) {
-                                listaTareas.remove(i);
                                 tareaLab.get(MainActivity.this).deleteTarea(listaTareas.get(i));
 
                             }
                         }
 
+                        refrescarTodosListados();
+                    }
                 }
             });
-
             snackbar.show();
-
         });
 
         builderEliminar.setNegativeButton("Cancelar", null);

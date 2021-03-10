@@ -29,7 +29,6 @@
                 android:background="@color/colorOnPrimary"
                 android:backgroundTint="@android:color/holo_red_light"
                 android:backgroundTintMode="screen"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -74,6 +73,21 @@
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_tareaNueva" />
+
+                <TextView
+                    android:id="@+id/tv_horaNueva"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/amaranth"
+                    android:text="@string/tv_hora_item"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_fechaNueva"
+                    app:layout_constraintStart_toEndOf="@+id/tv_fechaNueva"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.976" />
 
                 <ImageView
                     android:id="@+id/imageViewMarcador"

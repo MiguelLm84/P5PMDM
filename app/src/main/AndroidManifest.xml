@@ -28,12 +28,6 @@
         android:roundIcon="@mipmap/ic_icono_new_todo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppTheme">
-        <activity android:name=".ui.ActivityRecordatorio"
-            android:parentActivityName=".ui.ActivityTarea">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
-        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -69,6 +63,15 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-    </application>
+        <receiver
+            android:name="com.miguel_lm.newapptodo.ui.AlarmReceiver"
+            android:enabled="true" />
 
+        <service
+            android:name="com.miguel_lm.newapptodo.ui.NotificationService"
+            android:enabled="true" />
+
+        <receiver android:name = ".ui.NotificacionReceiver" />
+
+    </application>
 </manifest>

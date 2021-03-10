@@ -1,36 +1,35 @@
 package com.miguel_lm.newapptodo.ui;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
+import com.miguel_lm.newapptodo.ControlTareas;
 import com.miguel_lm.newapptodo.R;
 import com.miguel_lm.newapptodo.core.Tarea;
 import com.miguel_lm.newapptodo.core.TareaLab;
@@ -40,16 +39,24 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class ActivityTarea extends AppCompatActivity {
 
     private EditText editTextTareaTitulo;
-    private TextView textViewTareaFechaLimite;
-    private TextView tv_tituloNuevaTarea;
+    private TextView textViewTareaFechaLimite, textViewTareaHoraLimite;
+    TextView tv_tituloNuevaTarea;
     private Date fechaLimiteSeleccionada;
+    private Date horaLimiteSeleccionada;
     public static final String PARAM_TAREA_EDITAR = "param_tarea_editar";
     private TextView textViewTareaPosicion;
-    private Button bt_Aceptar, bt_Cancel;
+
+    EditText ed_digitoRecordatorio;
+    RadioGroup radioGroupRecordatorio;
+    //RadioButton radioMin, radioHoras, radioDias;
+    AlertDialog dialog;
+
+    int alarmID = 1;
 
     public enum ActivityTareaModo {crear, editar}
 
@@ -64,10 +71,8 @@ public class ActivityTarea extends AppCompatActivity {
 
     int PERMISSION_ID = 44;
 
-    private static final int REQUEST_RECORDATORIO = 5566;
-
     // Datos del recordatorio
-    int horas, dias, minutos;
+    int horasRecordatorio, diasRecordatorio, minutosRecordatorio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +91,7 @@ public class ActivityTarea extends AppCompatActivity {
 
         editTextTareaTitulo = findViewById(R.id.ed_nomTarea);
         textViewTareaFechaLimite = findViewById(R.id.textViewTareaFechaLimite);
+        textViewTareaHoraLimite = findViewById(R.id.textViewTareaHoraLimite);
         tv_tituloNuevaTarea = findViewById(R.id.tv_tituloNuevaTarea);
         textViewTareaPosicion = findViewById(R.id.textViewTareaPosicion);
 
@@ -95,22 +101,41 @@ public class ActivityTarea extends AppCompatActivity {
 
         if (activityTareaModo == ActivityTareaModo.editar) {
             fechaLimiteSeleccionada = tareaEditar.fechaLimite;
+            horaLimiteSeleccionada = tareaEditar.horaLimite;
             mostrarTarea();
+            mostrarHora();
             tv_tituloNuevaTarea.setText("Modificar Tarea");
             //Toast.makeText(getApplicationContext(), "Modificar tarea existente.", Toast.LENGTH_SHORT).show();
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         } else {
             fechaLimiteSeleccionada = new Date();
+            horaLimiteSeleccionada = new Date();
             tv_tituloNuevaTarea.setText("Nueva Tarea");
             //Toast.makeText(getApplicationContext(), "Crear una nueva tarea.", Toast.LENGTH_SHORT).show();
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
         mostrarFecha();
+        mostrarHora();
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         textViewTareaPosicion.setText("");
         pedirPosicionUsuario();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        long tiempo = System.currentTimeMillis();
+        if (tiempo - tiempoParaSalir > 3000) {
+            tiempoParaSalir = tiempo;
+            Toast.makeText(this, "Presione de nuevo 'Atrás' si desea salir",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            super.onBackPressed();
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        }
     }
 
     @Override
@@ -129,11 +154,6 @@ public class ActivityTarea extends AppCompatActivity {
 
             mostrarPosicion();
 
-        } else if (requestCode == 5566 && resultCode == RESULT_OK) {
-
-            minutos = data.getIntExtra("MINUTOS", 0);
-            horas = data.getIntExtra("HORAS", 0);
-            dias = data.getIntExtra("DIAS", 0);
         }
     }
 
@@ -177,6 +197,7 @@ public class ActivityTarea extends AppCompatActivity {
 
         editTextTareaTitulo.setText(tareaEditar.getTitulo());
         textViewTareaFechaLimite.setText(tareaEditar.getFechaTexto());
+        textViewTareaHoraLimite.setText(tareaEditar.getHoraTexto());
     }
 
     private void mostrarFecha() {
@@ -184,25 +205,10 @@ public class ActivityTarea extends AppCompatActivity {
         textViewTareaFechaLimite.setText(formatoFecha.format(fechaLimiteSeleccionada));
     }
 
-    public void cambiarFecha(View view) {
-
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(fechaLimiteSeleccionada);
-
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
-
-        final DatePickerDialog dpd = new DatePickerDialog(this, (datePicker, year1, monthOfYear, dayOfMonth) -> {
-            calendar.set(Calendar.YEAR, year1);
-            calendar.set(Calendar.MONTH, monthOfYear);
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-            fechaLimiteSeleccionada = calendar.getTime();
-
-            mostrarFecha();
-        }, year, month, day);
-        dpd.show();
+    private void mostrarHora() {
+        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        formatoHora.setTimeZone(TimeZone.getTimeZone("Europe/Madrid"));
+        textViewTareaHoraLimite.setText(formatoHora.format(horaLimiteSeleccionada));
     }
 
     public void buttonCancelarClick(View view) {
@@ -219,7 +225,6 @@ public class ActivityTarea extends AppCompatActivity {
     public void buttonOkClick(View view) {
 
         String titulo = editTextTareaTitulo.getText().toString();
-        String fecha = textViewTareaFechaLimite.getText().toString();
 
         if (titulo.isEmpty()) {
             Toast.makeText(this, "El título no puede estar en blanco", Toast.LENGTH_SHORT).show();
@@ -228,50 +233,70 @@ public class ActivityTarea extends AppCompatActivity {
 
         if (activityTareaModo == ActivityTareaModo.crear) {
 
-            Tarea nuevaTarea = new Tarea(titulo, fechaLimiteSeleccionada, posicionUsuario != null ? posicionUsuario.getLatitude() : 0, posicionUsuario != null ? posicionUsuario.getLongitude() : 0);
+            Tarea nuevaTarea = new Tarea(titulo, fechaLimiteSeleccionada, horaLimiteSeleccionada, posicionUsuario != null ? posicionUsuario.getLatitude() : 0, posicionUsuario != null ? posicionUsuario.getLongitude() : 0);
             long idNuevaTarea = tareaLab.insertTarea(nuevaTarea);
+            nuevaTarea.setmId((int) idNuevaTarea);
 
-            createNotificationChannel();
-            //createNotification(idNuevaTarea);
-            createNotification(nuevaTarea.mId);
+            ControlTareas.getInstance().tareaActual = nuevaTarea;
 
-            //Toast.makeText(getApplicationContext(),"Tarea añadida a la BD correctamente.",Toast.LENGTH_SHORT).show();
-            //Toast.makeText(this, "Evento añadido.", Toast.LENGTH_SHORT).show();
+            generarNotificacionProgramada();
+
+            setResult(RESULT_OK);
+            finish();
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
         } else {
 
+
             tareaEditar.setTareaSeleccionada(false);
-            tareaEditar.modificar(titulo, fechaLimiteSeleccionada);
-            tareaLab.updateTarea(tareaEditar);
+            tareaEditar.modificar(titulo, fechaLimiteSeleccionada, horaLimiteSeleccionada, posicionUsuario != null ? posicionUsuario.getLatitude() : 0, posicionUsuario != null ? posicionUsuario.getLongitude() : 0);
+
+            ControlTareas.getInstance().tareaActual = tareaEditar;
+
+            generarNotificacionProgramada();
+
             snackbar.setAction(R.string.undo, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    tareaLab.get(ActivityTarea.this).insertTarea(tareaEditar);
+                }
+            });
+            snackbar.addCallback(new Snackbar.Callback() {
+                @Override
+                public void onShown(Snackbar sb) {
+                    super.onShown(sb);
+                }
+
+                @Override
+                public void onDismissed(Snackbar transientBottomBar, int event) {
+                    super.onDismissed(transientBottomBar, event);
+
+                    if (event != DISMISS_EVENT_ACTION) {
+
+                        // Entrará aquí si NO se pulsa el botón undo
+                        tareaLab.updateTarea(tareaEditar);
+
+                    }
+
+
+                    setResult(RESULT_OK);
+                    finish();
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 }
             });
             snackbar.show();
-            //Toast.makeText(getApplicationContext(),"Tarea modificada correctamente.",Toast.LENGTH_SHORT).show();
-            createNotificationChannel();
-            createNotification(tareaEditar.mId);
+
+            //createNotification(tareaEditar.mId);
         }
 
-        setResult(RESULT_OK);
-        finish();
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
     }
 
-    @Override
-    public void onBackPressed() {
 
-        long tiempo = System.currentTimeMillis();
-        if (tiempo - tiempoParaSalir > 3000) {
-            tiempoParaSalir = tiempo;
-            Toast.makeText(this, "Presione de nuevo 'Atrás' si desea salir",
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            super.onBackPressed();
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        }
-    }
+
+    ///////////////////////////////////////////
+    // UBICACIÓN
+    ///////////////////////////////////////////
+
 
     public void seleccionarPosicionEnMapa(View view) {
 
@@ -279,30 +304,7 @@ public class ActivityTarea extends AppCompatActivity {
         intent.putExtra("POSICION", posicionUsuario);
         startActivityForResult(intent, 1234);  // TODO: usar constante
 
-        //todo: Borrar todo lo del snackbar de aquí para bajo hasta la línea 292.
-        /*textViewTareaPosicion.setVisibility(View.VISIBLE);
-
-        if (textViewTareaPosicion.getText() != null) {
-            snackbarUbicacion.setAction(R.string.undo, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    textViewTareaPosicion.setText("");
-                    textViewTareaPosicion.setVisibility(View.GONE);
-                }
-            });
-            snackbarUbicacion.show();
-        } else {
-            textViewTareaPosicion.setText("");
-        }*/
-    }
-
-    public void IntroducirRecordatorio(View view) {
-
-        Intent intent = new Intent(this, ActivityRecordatorio.class);
-        intent.putExtra("TAREA", tareaEditar);
-
-        startActivityForResult(intent, REQUEST_RECORDATORIO);
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        textViewTareaPosicion.setVisibility(View.VISIBLE);
     }
 
     public void anhadirUbicacionActual(View view) {
@@ -322,61 +324,136 @@ public class ActivityTarea extends AppCompatActivity {
     }
 
 
-    ///////////////////////////////////
-    // ENVIAR NOTIFICAIÓN
-    ///////////////////////////////////
+
+    //////////////////////////////////////////
+    // MODIFICAR FECHA Y HORA
+    //////////////////////////////////////////
+
+    public void cambiarFecha(View view) {
+
+        final Calendar calendarFecha = Calendar.getInstance();
+        calendarFecha.setTime(fechaLimiteSeleccionada);
 
 
-    private final static String CHANNEL_ID = "NOTIFICACION";
-    private final static int NOTIFICACION_ID = 0;
+        int day = calendarFecha.get(Calendar.DAY_OF_MONTH);
+        int month = calendarFecha.get(Calendar.MONTH);
+        int year = calendarFecha.get(Calendar.YEAR);
 
-    private void createNotificationChannel() {
+        final DatePickerDialog dpd = new DatePickerDialog(this, (datePicker, year1, monthOfYear, dayOfMonth) -> {
+            calendarFecha.set(Calendar.YEAR, year1);
+            calendarFecha.set(Calendar.MONTH, monthOfYear);
+            calendarFecha.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "Notificacion";
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
+            fechaLimiteSeleccionada = calendarFecha.getTime();
+
+            mostrarFecha();
+        }, year, month, day);
+        dpd.show();
     }
 
-    private void createNotification(long idTarea) {
+    public void cambiarHora(View view) {
 
-        // todo: falta usar, dias, horas o minutos para programar la notificación
+        final Calendar calendarHora = Calendar.getInstance();
+        calendarHora.setTimeZone(TimeZone.getTimeZone("Europe/Madrid"));
+        calendarHora.setTime(horaLimiteSeleccionada);
+
+        int hour = calendarHora.get(Calendar.HOUR_OF_DAY);
+        int minutes = calendarHora.get(Calendar.MINUTE);
+
+        final TimePickerDialog tpd = new TimePickerDialog(ActivityTarea.this, new TimePickerDialog.OnTimeSetListener() {
+
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hora, int minutos) {
+
+                calendarHora.set(Calendar.HOUR_OF_DAY, hora);
+                calendarHora.set(Calendar.MINUTE, minutos);
+
+                horaLimiteSeleccionada = calendarHora.getTime();
+
+                mostrarHora();
+            }
+        }, hour, minutes, true);
+        tpd.show();
+    }
+
+    ///////////////////////////////////////
+    // DIÁLOGO DE RECORDATORIO
+    ///////////////////////////////////////
+
+    public void dialogoRecordatorio(View view) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ActivityTarea.this);
+        final View dialogLayout = LayoutInflater.from(ActivityTarea.this).inflate(R.layout.dialog_recordatorio, null);
+        builder.setView(dialogLayout);
+        dialog = builder.create();
+
+        ed_digitoRecordatorio = dialogLayout.findViewById(R.id.ed_digitoRecordatorio);
+        radioGroupRecordatorio = dialogLayout.findViewById(R.id.radioGroupRecordatorio);
+
+        dialog.show();
+
+    }
+
+    /** Salir del diálogo de recordatorio */
+    public void cancelarDialogoRecordatorio(View view) {
+
+        dialog.dismiss();
+    }
 
 
-        // Acción modificar
-        Intent intentModificar = new Intent(this, ActivityTarea.class);
-        intentModificar.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intentModificar.getExtras().putLong("id_tarea_modificar", idTarea);
-        PendingIntent pendingIntentModificar = PendingIntent.getActivity(this, 1, intentModificar, PendingIntent.FLAG_UPDATE_CURRENT);
-        NotificationCompat.Action modificar = new NotificationCompat.Action.Builder(R.drawable.ic_baseline_3p_24, "Modificar", pendingIntentModificar).build();
+    /** Salir del diálogo de recordatorio */
+    public void aceptarDialogoRecordatorio(View view) {
 
-        // Acción borrar
-        Intent intentBorrar = new Intent(this, ActivityTarea.class);
-        intentBorrar.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntentBorrar = PendingIntent.getActivity(this, 0, intentBorrar, 0);
-        NotificationCompat.Action borrar = new NotificationCompat.Action.Builder(R.drawable.ic_baseline_3p_24, "Borrar", pendingIntentBorrar).build();
+        int num = ed_digitoRecordatorio.getText().length();
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
-        builder.setSmallIcon(R.drawable.ic_baseline_message_24);
-        builder.setContentTitle("Recordatorio Tarea");
-        //builder.setContentText(tituloTareaRecordatorio + "\n" + fechaTareaRecordatorio);
-        builder.setColor(Color.BLUE);
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        builder.setCategory(NotificationCompat.CATEGORY_REMINDER);
-        builder.setContentIntent(pendingIntentModificar);
-        builder.setAutoCancel(true);
-        builder.setLights(Color.MAGENTA, 1000, 1000);
-        builder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
-        builder.setDefaults(Notification.DEFAULT_SOUND);
+        minutosRecordatorio = 0;
+        horasRecordatorio = 0;
+        diasRecordatorio = 0;
+        if (radioGroupRecordatorio.getCheckedRadioButtonId() == R.id.radioButton_min)
+            minutosRecordatorio = num;
+        else if (radioGroupRecordatorio.getCheckedRadioButtonId() == R.id.radioButton_horas)
+            horasRecordatorio = num;
+        else
+            diasRecordatorio = num;
 
-        // Añadir acciones
-        builder.addAction(modificar);
-        builder.addAction(borrar);
+        dialog.dismiss();
 
-        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getApplicationContext());
-        notificationManagerCompat.notify(NOTIFICACION_ID, builder.build());
+    }
+
+    ///////////////////////////////////////
+    // MOSTRAR NOTIFICACIÓN
+    ///////////////////////////////////////
+
+
+    public void generarNotificacionProgramada() {
+
+        Tarea tarea = ControlTareas.getInstance().tareaActual;
+
+        Calendar calendarFecha = Calendar.getInstance();
+        calendarFecha.setTime(tarea.fechaLimite);
+
+        Calendar calendarHora = Calendar.getInstance();
+        calendarHora.setTime(tarea.horaLimite);
+
+        Calendar calendarAlarma = Calendar.getInstance();
+        calendarAlarma.set(Calendar.DAY_OF_MONTH, calendarFecha.get(Calendar.DAY_OF_MONTH));
+        calendarAlarma.set(Calendar.MONTH, calendarFecha.get(Calendar.MONTH));
+        calendarAlarma.set(Calendar.YEAR, calendarFecha.get(Calendar.YEAR));
+        calendarAlarma.set(Calendar.HOUR_OF_DAY, calendarHora.get(Calendar.HOUR_OF_DAY));
+        calendarAlarma.set(Calendar.MINUTE, calendarHora.get(Calendar.MINUTE));
+
+        if (diasRecordatorio != 0)
+            calendarAlarma.add(Calendar.DAY_OF_YEAR, -diasRecordatorio);
+        else if (horasRecordatorio != 0)
+            calendarAlarma.add(Calendar.HOUR_OF_DAY, -horasRecordatorio);
+        else
+            calendarAlarma.add(Calendar.MINUTE, -minutosRecordatorio);
+
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, alarmID, alarmIntent, PendingIntent.FLAG_ONE_SHOT);
+        alarmIntent.setData((Uri.parse("custom://" + System.currentTimeMillis())));
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendarAlarma.getTimeInMillis(), pendingIntent);
     }
 
 }

@@ -25,7 +25,7 @@
     <string name="tv_tituloAnhadirLocation">Añadir Localización</string>
     <string name="tv_posicion">Posición</string>
     <string name="tv_tituloPosicion">Posición</string>
-    <string name="mensaje"> Esta seguro de eleiminar esta tarea?</string>
+    <string name="mensaje"> Esta seguro de eliminar esta tarea?</string>
     <string name="undo">UNDO</string>
     <string name="tv_anhadir_recordatorio">Añadir Recordatorio</string>
     <string name="txt_anhadir_recordatorio">Añadir Recordatorio</string>
@@ -36,4 +36,8 @@
     <string name="txt_ubicacion_actual">Ubicación Actual</string>
     <string name="mas">Mas</string>
     <string name="txt_coordenadas">lat: 00.0000, long:00.0000</string>
+    <string name="txt_hora">Hora</string>
+    <string name="tv_tituloHora">Hora</string>
+    <string name="tv_hora_item">00:00h</string>
+    <string name="new_notification">Recordatorio Tarea</string>
 </resources>

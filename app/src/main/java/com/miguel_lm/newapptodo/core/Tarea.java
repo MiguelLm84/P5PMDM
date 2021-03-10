@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 @Entity(tableName = "Tarea")
 public class Tarea implements Serializable, Comparable<Tarea> {
@@ -33,20 +34,32 @@ public class Tarea implements Serializable, Comparable<Tarea> {
     @ColumnInfo(name = "fechaLimite")
     public Date fechaLimite;
 
+    @ColumnInfo(name = "horaLimite")
+    public Date horaLimite;
+
     @ColumnInfo(name = "latitud")
     public double latitud;
 
     @ColumnInfo(name = "longitud")
     public double longitud;
 
+    public int getmId() {
+        return mId;
+    }
+
+    public void setmId(int mId) {
+        this.mId = mId;
+    }
+
     private boolean tareaSeleccionada;
 
-    public Tarea(String titulo, Date fechaLimite, double latitud, double longitud) {
+    public Tarea(String titulo, Date fechaLimite, Date horaLimite, double latitud, double longitud) {
         this.titulo = titulo;
         this.fechaCreacion = new Date();
         this.esFav = false;
         this.completado = false;
         this.fechaLimite = fechaLimite;
+        this.horaLimite = horaLimite;
         this.latitud = latitud;
         this.longitud = longitud;
         tareaSeleccionada = false;
@@ -89,6 +102,14 @@ public class Tarea implements Serializable, Comparable<Tarea> {
         return fechaCreacion;
     }
 
+    public Date getHoraLimite() {
+        return horaLimite;
+    }
+
+    public void setHoraLimite(Date horaLimite) {
+        this.horaLimite = horaLimite;
+    }
+
     public double getLatitud() {
         return latitud;
     }
@@ -106,13 +127,19 @@ public class Tarea implements Serializable, Comparable<Tarea> {
     }
 
     public String getFechaTexto() {
-        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd MMMM 'de' yyyy   hh:mm", Locale.getDefault());
+        SimpleDateFormat formatoFecha = new SimpleDateFormat("dd MMMM 'de' yyyy", Locale.getDefault());
         return formatoFecha.format(fechaLimite);
     }
 
     public String getFechaTextoCorta() {
         SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy ", Locale.getDefault());
         return formatoFecha.format(fechaLimite);
+    }
+
+    public String getHoraTexto() {
+        SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        formatoHora.setTimeZone(TimeZone.getTimeZone("Europe/Madrid"));
+        return formatoHora.format(horaLimite);
     }
 
     public void setFechaCreacion(Date fechaCreacion) {
@@ -123,9 +150,12 @@ public class Tarea implements Serializable, Comparable<Tarea> {
         return "\n· TITULO: " + getTitulo() + "\n\n· FECHA: " + getFechaTexto();
     }
 
-    public void modificar(String titulo, Date fecha) {
+    public void modificar(String titulo, Date fecha, Date hora, double latitud, double longitud) {
         this.titulo = titulo;
         this.fechaLimite = fecha;
+        this.horaLimite = hora;
+        this.latitud = latitud;
+        this.longitud = longitud;
     }
 
     public boolean isTareaSeleccionada() {
