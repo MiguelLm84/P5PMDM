@@ -231,10 +231,8 @@ public class MainActivity extends AppCompatActivity {
                         for (int i = listaTareas.size() - 1; i >= 0; i--) {
                             if (tareasSeleccionadas[i]) {
                                 tareaLab.get(MainActivity.this).deleteTarea(listaTareas.get(i));
-
                             }
                         }
-
                         refrescarTodosListados();
                     }
                 }

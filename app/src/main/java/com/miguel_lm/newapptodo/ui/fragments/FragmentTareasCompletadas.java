@@ -38,10 +38,12 @@ public class FragmentTareasCompletadas extends Fragment implements ListenerTarea
     TareaLab tareaLab;
     Tarea tareaAmodificar;
     private static final int REQUEST_EDITAR_TAREA = 1222;
+
+    public static final String REQUEST_TAREA_COMPLETADA = "marcar como completada";
+
     private ImageView imageButtonModificarTarea;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         FragmentTareasInstanceCompletadas = this;
 
@@ -57,6 +59,10 @@ public class FragmentTareasCompletadas extends Fragment implements ListenerTarea
         tareaLab = TareaLab.get(getContext());
         List<Tarea> listaTareasCompletadas = tareaLab.getTareasCaducadas();
         Collections.sort(listaTareasCompletadas);
+
+        //TODO: Botón notificación añadir tarea como completada
+        Tarea task = (Tarea) getActivity().getIntent().getSerializableExtra(REQUEST_TAREA_COMPLETADA);
+        completarTarea(task, true);
 
         RecyclerView recyclerViewTareasCaducadas = root.findViewById(R.id.recyclerViewTareas);
         recyclerViewTareasCaducadas.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -93,8 +99,9 @@ public class FragmentTareasCompletadas extends Fragment implements ListenerTarea
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_EDITAR_TAREA   &&   resultCode == RESULT_OK)
+        if (requestCode == REQUEST_EDITAR_TAREA   &&   resultCode == RESULT_OK) {
             refrescarListado();
+        }
     }
 
     public void refrescarListado() {

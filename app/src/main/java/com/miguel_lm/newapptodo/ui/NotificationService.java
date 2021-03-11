@@ -49,17 +49,20 @@ public class NotificationService extends IntentService {
 
         String message = getString(R.string.new_notification);
 
-        // Botón de modificar
+        int iUniqueId = (int) (System.currentTimeMillis() & 0xfffffff);
+
+
+        // Botón de pasar la tarea a caducadas
         Intent intentModificar = new Intent(this, NotificacionReceiver.class);
-        intentModificar.setAction("MODIFICAR");
+        intentModificar.setAction("COMPLETADA");
         intentModificar.putExtra("TAREA", ControlTareas.getInstance().tareaActual);
-        PendingIntent pendingIntentModificar = PendingIntent.getBroadcast(this, 0, intentModificar, 0);
+        PendingIntent pendingIntentModificar = PendingIntent.getBroadcast(this, iUniqueId, intentModificar, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Botón de borrar
         Intent intentBorrar = new Intent(this, NotificacionReceiver.class);
         intentBorrar.setAction("BORRAR");
         intentBorrar.putExtra("TAREA", ControlTareas.getInstance().tareaActual);
-        PendingIntent pendingIntentBorrar = PendingIntent.getBroadcast(this, 0, intentBorrar, 0);
+        PendingIntent pendingIntentBorrar = PendingIntent.getBroadcast(this, iUniqueId, intentBorrar, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             final int NOTIFY_ID = 0;
@@ -82,19 +85,20 @@ public class NotificationService extends IntentService {
             builder = new NotificationCompat.Builder(context, id);
             mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             pendingIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.setContentTitle(getString(R.string.app_name)).setCategory(Notification.CATEGORY_SERVICE)
+            builder.setContentTitle(ControlTareas.getInstance().tareaActual.getTitulo()).setCategory(Notification.CATEGORY_SERVICE)
                     .setSmallIcon(R.drawable.ic_baseline_message_24)
-                    .setContentText(message)
+                    .setContentText(ControlTareas.getInstance().tareaActual.toStringTareaNotificacion())    //(message)
                     .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_baseline_message_24))
                     .setColor(Color.BLUE)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
                     .setSound(soundUri)
-                    .addAction(R.drawable.ic_edit_button, "Modificar", pendingIntentModificar)
+                    .addAction(R.drawable.cheque, "Completada", pendingIntentModificar)
                     .addAction(R.drawable.ic_eliminar__1_, "Eliminar", pendingIntentBorrar)
                     .setContentIntent(pendingIntent)
                     .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             Notification notification = builder.build();
+
             notifManager.notify(NOTIFY_ID, notification);
 
             startForeground(1, notification);
@@ -107,7 +111,8 @@ public class NotificationService extends IntentService {
                     .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_baseline_message_24))
                     .setSound(soundUri)
                     .setAutoCancel(true)
-                    .setContentTitle(getString(R.string.app_name)).setCategory(Notification.CATEGORY_SERVICE)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setCategory(Notification.CATEGORY_SERVICE)
                     .setContentText(message).build();
             notificationManager.notify(NOTIFICATION_ID, notification);
         }

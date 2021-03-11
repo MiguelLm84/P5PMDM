@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.miguel_lm.newapptodo.R;
 import com.miguel_lm.newapptodo.core.Tarea;
 import com.miguel_lm.newapptodo.core.TareaLab;
@@ -23,10 +24,10 @@ import com.miguel_lm.newapptodo.ui.ListenerTareas;
 
 public class ViewHolderTarea extends RecyclerView.ViewHolder {
 
-    private TextView tv_Tarea_Fecha,tv_Tarea_Hora;
+    private TextView tv_Tarea_Fecha, tv_Tarea_Hora;
     private TextView tv_Tarea_Titulo;
     private CardView cardViewTarea;
-    private ImageButton btn_fav_no_activado,btn_fav_activado, btn_elimimnar;
+    private ImageButton btn_fav_no_activado, btn_fav_activado, btn_elimimnar;
     private CheckBox checkBoxSeleccion;
     private ConstraintLayout constraintLayoutTarea;
     private TareaLab tareaLab;
@@ -35,7 +36,6 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
     static final String COLOR_SELECCIONADO = "#ffff0000";  //"#E30425";
     static final String COLOR_NO_SELECCIONADO = "#000000";
     static final String COLOR_COMPLETADO = "#AD686868";
-
 
     private ListenerTareas listenerTareas;
 
@@ -104,14 +104,41 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
                 builderEliminar_Confirmar.setMessage("¿Eliminar la tarea '" + tarea.getTitulo() + "'?");
                 builderEliminar_Confirmar.setNegativeButton("Cancelar", null);
                 builderEliminar_Confirmar.setPositiveButton("Borrar", (dialogInterface, which) -> {
-                    TareaLab.get(context).deleteTarea(tarea);
-                    Toast.makeText(context, "Tarea eliminada", Toast.LENGTH_SHORT).show();
 
-                    listenerTareas.eliminarTarea(tarea);
+                    Snackbar snackbar = Snackbar.make(cardViewTarea, R.string.mensaje, Snackbar.LENGTH_LONG);
+                    snackbar.setAction(R.string.undo, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                        }
+                    });
+                    snackbar.addCallback(new Snackbar.Callback() {
+                        @Override
+                        public void onShown(Snackbar sb) {
+                            super.onShown(sb);
+                        }
+
+                        @Override
+                        public void onDismissed(Snackbar transientBottomBar, int event) {
+                            super.onDismissed(transientBottomBar, event);
+
+                            if (event != DISMISS_EVENT_ACTION) {
+                                TareaLab.get(context).deleteTarea(tarea);
+
+                                listenerTareas.eliminarTarea(tarea);
+
+                            }
+                        }
+                    });
+
+                    snackbar.show();
+
                 });
+
                 builderEliminar_Confirmar.create().show();
 
             }
+
+
         });
 
         checkBoxSeleccion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

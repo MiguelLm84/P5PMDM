@@ -147,7 +147,13 @@ public class Tarea implements Serializable, Comparable<Tarea> {
     }
 
     public String toStringTarea() {
-        return "\n· TITULO: " + getTitulo() + "\n\n· FECHA: " + getFechaTexto();
+
+        return "\n· TITULO: " + getTitulo() + "\n· FECHA: " + getFechaTexto() + "\n· HORA: " + getHoraTexto();
+    }
+
+    public String toStringTareaNotificacion() {
+
+        return  "\n" + getFechaTexto() + " " + getHoraTexto();
     }
 
     public void modificar(String titulo, Date fecha, Date hora, double latitud, double longitud) {

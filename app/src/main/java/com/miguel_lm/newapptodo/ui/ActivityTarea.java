@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -68,6 +69,7 @@ public class ActivityTarea extends AppCompatActivity {
     private FusedLocationProviderClient fusedLocationClient;
     private Location posicionUsuario;
     Snackbar snackbar, snackbarUbicacion;
+    Button btn_aceptar;
 
     int PERMISSION_ID = 44;
 
@@ -239,7 +241,8 @@ public class ActivityTarea extends AppCompatActivity {
 
             ControlTareas.getInstance().tareaActual = nuevaTarea;
 
-            generarNotificacionProgramada();
+            if (minutosRecordatorio != 0 || horasRecordatorio != 0 || diasRecordatorio != 0)
+                generarNotificacionProgramada();
 
             setResult(RESULT_OK);
             finish();
@@ -247,13 +250,13 @@ public class ActivityTarea extends AppCompatActivity {
 
         } else {
 
-
             tareaEditar.setTareaSeleccionada(false);
             tareaEditar.modificar(titulo, fechaLimiteSeleccionada, horaLimiteSeleccionada, posicionUsuario != null ? posicionUsuario.getLatitude() : 0, posicionUsuario != null ? posicionUsuario.getLongitude() : 0);
 
             ControlTareas.getInstance().tareaActual = tareaEditar;
 
-            generarNotificacionProgramada();
+            if (minutosRecordatorio != 0 || horasRecordatorio != 0 || diasRecordatorio != 0)
+                generarNotificacionProgramada();
 
             snackbar.setAction(R.string.undo, new View.OnClickListener() {
                 @Override
@@ -276,8 +279,6 @@ public class ActivityTarea extends AppCompatActivity {
                         tareaLab.updateTarea(tareaEditar);
 
                     }
-
-
                     setResult(RESULT_OK);
                     finish();
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
@@ -287,11 +288,7 @@ public class ActivityTarea extends AppCompatActivity {
 
             //createNotification(tareaEditar.mId);
         }
-
-
     }
-
-
 
     ///////////////////////////////////////////
     // UBICACIÓN
@@ -322,7 +319,6 @@ public class ActivityTarea extends AppCompatActivity {
         });
         snackbarUbicacion.show();
     }
-
 
 
     //////////////////////////////////////////
@@ -394,27 +390,47 @@ public class ActivityTarea extends AppCompatActivity {
 
     }
 
-    /** Salir del diálogo de recordatorio */
+    /**
+     * Salir del diálogo de recordatorio
+     */
     public void cancelarDialogoRecordatorio(View view) {
 
         dialog.dismiss();
     }
 
 
-    /** Salir del diálogo de recordatorio */
+    /**
+     * Salir del diálogo de recordatorio
+     */
     public void aceptarDialogoRecordatorio(View view) {
 
-        int num = ed_digitoRecordatorio.getText().length();
+        String numeroEscrito = ed_digitoRecordatorio.getText().toString();
+
+        int numeroInt = 0;
+        try {
+            numeroInt = Integer.parseInt(numeroEscrito);
+        } catch (Exception e) {
+
+        }
+        btn_aceptar = findViewById(R.id.btn_aceptar);
 
         minutosRecordatorio = 0;
         horasRecordatorio = 0;
         diasRecordatorio = 0;
-        if (radioGroupRecordatorio.getCheckedRadioButtonId() == R.id.radioButton_min)
-            minutosRecordatorio = num;
-        else if (radioGroupRecordatorio.getCheckedRadioButtonId() == R.id.radioButton_horas)
-            horasRecordatorio = num;
-        else
-            diasRecordatorio = num;
+        if (numeroEscrito.isEmpty() || radioGroupRecordatorio.isSelected() || numeroInt == 0) {
+            Toast.makeText(this, "Este campo no admite vacío ni 0 y se debe seleccionar un radio.", Toast.LENGTH_SHORT).show();
+            btn_aceptar.setFocusable(false);  //TODO: No está funcionando.
+
+            return;
+
+        } else {
+            if (radioGroupRecordatorio.getCheckedRadioButtonId() == R.id.radioButton_min)
+                minutosRecordatorio = numeroInt;
+            else if (radioGroupRecordatorio.getCheckedRadioButtonId() == R.id.radioButton_horas)
+                horasRecordatorio = numeroInt;
+            else
+                diasRecordatorio = numeroInt;
+        }
 
         dialog.dismiss();
 

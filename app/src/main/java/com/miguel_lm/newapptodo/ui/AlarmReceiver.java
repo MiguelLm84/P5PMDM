@@ -15,6 +15,6 @@ public class AlarmReceiver extends BroadcastReceiver {
         Intent service1 = new Intent(context, NotificationService.class);
         service1.setData((Uri.parse("custom://" + System.currentTimeMillis())));
         ContextCompat.startForegroundService(context, service1);
-        Log.d("WALKIRIA", " ALARM RECEIVED!!!");
+        Log.d("ALARMA", " ALARMA RECIBIDA!!!");
     }
 }

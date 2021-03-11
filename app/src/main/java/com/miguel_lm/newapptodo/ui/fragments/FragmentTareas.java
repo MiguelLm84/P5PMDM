@@ -64,7 +64,7 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
 
         tareaLab = TareaLab.get(getContext());
         listaTareas = tareaLab.getTareasNoCaducadas();
-        Collections.sort(listaTareas);
+        //Collections.sort(listaTareas);
 
         RecyclerView recyclerViewTareas = root.findViewById(R.id.recyclerViewTareas);
         recyclerViewTareas.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -172,9 +172,6 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
 
         builderEliminar.setPositiveButton("Borrar", (dialog, which) -> {
 
-            /*AlertDialog.Builder builderEliminar_Confirmar = new AlertDialog.Builder(getContext());
-            builderEliminar_Confirmar.setIcon(R.drawable.exclamation);
-            builderEliminar_Confirmar.setTitle("¿Eliminar los elementos?");*/
             String textoNombresTareas = "";
 
             ArrayList<String> listaTareasAeliminar = new ArrayList<>();
@@ -196,28 +193,30 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
 
             for (int i = 0; i < listaTareasSeleccionadas.size(); i++) {
                 if (tareasSeleccionadasParaBorrar[i]) {
-                    Tarea tareaAborrar = listaTareasSeleccionadas.get(i);
-                    tareaLab.get(getContext()).deleteTarea(listaTareasSeleccionadas.get(i));
-                    refrescarListado();
+                    List<Tarea> listaTareasAborrar = new ArrayList<>();
+                    listaTareasAborrar.add(listaTareasSeleccionadas.get(i));
+
                     snackbar.setAction(R.string.undo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //listaTareasSeleccionadas.add(tareaAborrar);
-                            tareaLab.get(getContext()).insertTarea(tareaAborrar);
-                            refrescarListado();
-                            listaTareasSeleccionadas.clear();
-                            adapterTareas.actualizarListado(TareaLab.get(getContext()).getTareasNoCaducadas());
-                            onClickToolbarSalir();
+                            for(Tarea tarea : listaTareasAborrar){
+                                Tarea tareaAborrar = new Tarea(tarea.getTitulo(),tarea.getFechaLimite(),tarea.getHoraLimite(),tarea.getLatitud(),tarea.getLongitud());
+                                tareaLab.get(getContext()).insertTarea(tareaAborrar);
+                                refrescarListado();
+                                listaTareasSeleccionadas.clear();
+                                adapterTareas.actualizarListado(TareaLab.get(getContext()).getTareasNoCaducadas());
+                                onClickToolbarSalir();
+                            }
                         }
                     });
                     snackbar.show();
+                    tareaLab.get(getContext()).deleteTarea(listaTareasSeleccionadas.get(i));
+                    refrescarListado();
                     onClickToolbarSalir();
                     return;
                 }
             }
             listaTareasSeleccionadas.clear();
-            //builderEliminar_Confirmar.create().show();
-            //dialog.dismiss();
         });
 
         builderEliminar.setNegativeButton("Cancelar", null);
@@ -247,7 +246,5 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         List<Tarea> listaDeTareas = tareaLab.getTareas();
 
         Collections.sort(listaDeTareas);
-
-        //todo: IMPORTANTE, cambiar color de fondo a los que estén en la lista de fav y al mismo tiempo estén completadas.
     }
 }
