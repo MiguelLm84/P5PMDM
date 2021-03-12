@@ -20,6 +20,10 @@ import androidx.core.app.NotificationCompat;
 
 import com.miguel_lm.newapptodo.ControlTareas;
 import com.miguel_lm.newapptodo.R;
+import com.miguel_lm.newapptodo.core.Tarea;
+import com.miguel_lm.newapptodo.core.TareaLab;
+
+import java.util.List;
 
 public class NotificationService extends IntentService {
 
@@ -66,8 +70,8 @@ public class NotificationService extends IntentService {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             final int NOTIFY_ID = 0;
-            String id = NOTIFICATION_CHANNEL_ID;
-            String title = NOTIFICATION_CHANNEL_ID;
+            String id = "" + ControlTareas.getInstance().tareaActual.mId;
+            String title = "" + ControlTareas.getInstance().tareaActual.mId;
             PendingIntent pendingIntent;
             NotificationCompat.Builder builder;
             NotificationManager notifManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -85,20 +89,19 @@ public class NotificationService extends IntentService {
             builder = new NotificationCompat.Builder(context, id);
             mIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             pendingIntent = PendingIntent.getActivity(context, 0, mIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.setContentTitle(ControlTareas.getInstance().tareaActual.getTitulo()).setCategory(Notification.CATEGORY_SERVICE)
+            builder.setContentTitle("" + ControlTareas.getInstance().tareaActual.getTitulo()).setCategory(Notification.CATEGORY_SERVICE)
                     .setSmallIcon(R.drawable.ic_baseline_message_24)
-                    .setContentText(ControlTareas.getInstance().tareaActual.toStringTareaNotificacion())    //(message)
+                    .setContentText(ControlTareas.getInstance().tareaActual.toStringTareaNotificacion())
                     .setLargeIcon(BitmapFactory.decodeResource(res, R.drawable.ic_baseline_message_24))
                     .setColor(Color.BLUE)
                     .setDefaults(Notification.DEFAULT_ALL)
                     .setAutoCancel(true)
                     .setSound(soundUri)
-                    .addAction(R.drawable.cheque, "Completada", pendingIntentModificar)
+                    .addAction(R.drawable.ic_cheque, "Completada", pendingIntentModificar)
                     .addAction(R.drawable.ic_eliminar__1_, "Eliminar", pendingIntentBorrar)
                     .setContentIntent(pendingIntent)
                     .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
             Notification notification = builder.build();
-
             notifManager.notify(NOTIFY_ID, notification);
 
             startForeground(1, notification);

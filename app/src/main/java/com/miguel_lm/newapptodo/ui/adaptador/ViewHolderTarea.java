@@ -14,8 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.miguel_lm.newapptodo.R;
 import com.miguel_lm.newapptodo.core.Tarea;
@@ -54,6 +56,7 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
         checkBoxSeleccion = itemView.findViewById(R.id.checkBoxSeleccion);
         constraintLayoutTarea = itemView.findViewById(R.id.constraintLayoutTarea);
         textViewPosicion = itemView.findViewById(R.id.textViewPosicion);
+        cardViewTarea = itemView.findViewById(R.id.CardViewTarea);
     }
 
     public void mostrarTarea(final Tarea tarea, Context context) {
@@ -106,9 +109,11 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
                 builderEliminar_Confirmar.setPositiveButton("Borrar", (dialogInterface, which) -> {
 
                     Snackbar snackbar = Snackbar.make(cardViewTarea, R.string.mensaje, Snackbar.LENGTH_LONG);
+                    cardViewTarea.setVisibility(View.GONE);
                     snackbar.setAction(R.string.undo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            cardViewTarea.setVisibility(View.VISIBLE);
                         }
                     });
                     snackbar.addCallback(new Snackbar.Callback() {
@@ -122,18 +127,15 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
                             super.onDismissed(transientBottomBar, event);
 
                             if (event != DISMISS_EVENT_ACTION) {
-                                TareaLab.get(context).deleteTarea(tarea);
-
-                                listenerTareas.eliminarTarea(tarea);
-
+                                if(cardViewTarea.getVisibility() == View.GONE) {
+                                    TareaLab.get(context).deleteTarea(tarea);
+                                    listenerTareas.eliminarTarea(tarea);
+                                }
                             }
                         }
                     });
-
                     snackbar.show();
-
                 });
-
                 builderEliminar_Confirmar.create().show();
 
             }

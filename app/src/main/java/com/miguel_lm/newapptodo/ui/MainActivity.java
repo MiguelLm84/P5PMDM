@@ -1,13 +1,19 @@
 package com.miguel_lm.newapptodo.ui;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AnimationSet;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -16,12 +22,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.ViewCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.miguel_lm.newapptodo.R;
 import com.miguel_lm.newapptodo.core.Tarea;
@@ -47,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -200,10 +210,17 @@ public class MainActivity extends AppCompatActivity {
             builderEliminar_Confirmar.setIcon(R.drawable.exclamation);
             builderEliminar_Confirmar.setTitle("¿Eliminar los elementos?");
 
-            if(listaTareasAeliminar.isEmpty()){
+            if (listaTareasAeliminar.isEmpty()) {
                 Toast.makeText(getApplicationContext(), "Debe escoger una tarea", Toast.LENGTH_SHORT).show();
                 accionEscogerYEliminar();
                 return;
+            }
+
+            for (int i = listaTareas.size() - 1; i >= 0; i--) {
+                if (tareasSeleccionadas[i]) {
+                    //tareaLab.get(MainActivity.this).deleteTarea(listaTareas.get(i));
+
+                }
             }
 
             snackbar = Snackbar.make(findViewById(R.id.container), R.string.mensaje, Snackbar.LENGTH_SHORT);
@@ -211,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
             snackbar.setAction(R.string.undo, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    setVisible(true);
                 }
             });
             snackbar.addCallback(new Snackbar.Callback() {

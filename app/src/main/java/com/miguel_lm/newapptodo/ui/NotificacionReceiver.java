@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.provider.SyncStateContract;
 import android.util.Log;
 
+import com.miguel_lm.newapptodo.R;
 import com.miguel_lm.newapptodo.core.Tarea;
 import com.miguel_lm.newapptodo.core.TareaLab;
 import com.miguel_lm.newapptodo.ui.fragments.FragmentTareas;
@@ -25,13 +26,10 @@ public class NotificacionReceiver extends BroadcastReceiver {
             tareaRecogidaNotificacion.completado = true;
             TareaLab tareaLab = TareaLab.get(context);
             tareaLab.updateTarea(tareaRecogidaNotificacion);
-            return;
-
 
         } else if (accionEliminar) {
             TareaLab tareaLab = TareaLab.get(context);
             tareaLab.deleteTarea(tareaRecogidaNotificacion);
-            return;
         }
 
         Intent intentActivity = new Intent(context, MainActivity.class);

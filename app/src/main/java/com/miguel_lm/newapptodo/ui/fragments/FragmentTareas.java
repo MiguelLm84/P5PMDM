@@ -1,13 +1,17 @@
 package com.miguel_lm.newapptodo.ui.fragments;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,6 +49,11 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
     private static final int REQUEST_EDITAR_TAREA = 1222;
     Snackbar snackbar;
 
+    private ObjectAnimator animatorY;
+    private long animationDuration = 1000;
+    private AnimationSet animationSet;
+    ScrollView scrollView;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_tareas, container, false);
@@ -70,6 +79,14 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         recyclerViewTareas.setLayoutManager(new LinearLayoutManager(getContext()));
         adapterTareas = new AdapterTareas(getContext(), listaTareas, this);
         recyclerViewTareas.setAdapter(adapterTareas);
+
+        scrollView = root.findViewById(R.id.ScrollViewTarea);
+        scrollView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                animacion();
+            }
+        });
 
         imageButtonSalirToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,5 +263,14 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         List<Tarea> listaDeTareas = tareaLab.getTareas();
 
         Collections.sort(listaDeTareas);
+    }
+
+    public void animacion(){
+
+        animatorY = ObjectAnimator.ofFloat(R.id.fabNuevaTarea,"x",500f);
+        animatorY.setDuration(animationDuration);
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.play(animatorY);
+        animatorSet.start();
     }
 }
