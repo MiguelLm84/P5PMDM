@@ -67,7 +67,7 @@ public class NotificationService extends IntentService {
         PendingIntent pendingIntentBorrar = PendingIntent.getBroadcast(this, iUniqueId, intentBorrar, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            final int NOTIFY_ID = 0;
+            final int NOTIFY_ID = ControlTareas.getInstance().tareaActual.mId;
             String id = "" + ControlTareas.getInstance().tareaActual.mId;
             String title = "" + ControlTareas.getInstance().tareaActual.mId;
             PendingIntent pendingIntent;
