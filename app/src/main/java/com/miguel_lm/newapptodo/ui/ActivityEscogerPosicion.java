@@ -27,13 +27,10 @@ public class ActivityEscogerPosicion extends AppCompatActivity implements OnMapR
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_escoger_posicion);
 
-        // Conseguir acceso al objeto que pinta el mapa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
-        // Recoger posición
         ultimaPosicion = (Location) getIntent().getExtras().getParcelable("POSICION");
 
-        // Esperar que se inicialice
         mapFragment.getMapAsync(this);
 
     }

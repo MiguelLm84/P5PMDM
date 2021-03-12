@@ -56,13 +56,11 @@ public class NotificationService extends IntentService {
         int iUniqueId = (int) (System.currentTimeMillis() & 0xfffffff);
 
 
-        // Botón de pasar la tarea a caducadas
         Intent intentModificar = new Intent(this, NotificacionReceiver.class);
         intentModificar.setAction("COMPLETADA");
         intentModificar.putExtra("TAREA", ControlTareas.getInstance().tareaActual);
         PendingIntent pendingIntentModificar = PendingIntent.getBroadcast(this, iUniqueId, intentModificar, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        // Botón de borrar
         Intent intentBorrar = new Intent(this, NotificacionReceiver.class);
         intentBorrar.setAction("BORRAR");
         intentBorrar.putExtra("TAREA", ControlTareas.getInstance().tareaActual);

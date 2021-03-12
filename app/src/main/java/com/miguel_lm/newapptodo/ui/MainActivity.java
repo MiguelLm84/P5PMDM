@@ -218,7 +218,6 @@ public class MainActivity extends AppCompatActivity {
 
             for (int i = listaTareas.size() - 1; i >= 0; i--) {
                 if (tareasSeleccionadas[i]) {
-                    //tareaLab.get(MainActivity.this).deleteTarea(listaTareas.get(i));
 
                 }
             }
@@ -242,7 +241,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onDismissed(Snackbar transientBottomBar, int event) {
                     super.onDismissed(transientBottomBar, event);
 
-                    // NO Se ha pulsado el botón
                     if (event != DISMISS_EVENT_ACTION) {
 
                         for (int i = listaTareas.size() - 1; i >= 0; i--) {
@@ -327,8 +325,6 @@ public class MainActivity extends AppCompatActivity {
                         snackbar.show();
                     }
                 }
-                //Toast.makeText(this, "Tareas eliminadas correctamente", Toast.LENGTH_SHORT).show();
-
                 refrescarTodosListados();
             });
             builderEliminar_Confirmar.create().show();

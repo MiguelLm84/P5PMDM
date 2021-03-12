@@ -137,10 +137,7 @@ public class ViewHolderTarea extends RecyclerView.ViewHolder {
                     snackbar.show();
                 });
                 builderEliminar_Confirmar.create().show();
-
             }
-
-
         });
 
         checkBoxSeleccion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

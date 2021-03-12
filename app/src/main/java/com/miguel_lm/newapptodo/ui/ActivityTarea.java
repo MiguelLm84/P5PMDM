@@ -54,7 +54,6 @@ public class ActivityTarea extends AppCompatActivity {
 
     EditText ed_digitoRecordatorio;
     RadioGroup radioGroupRecordatorio;
-    //RadioButton radioMin, radioHoras, radioDias;
     AlertDialog dialog;
 
     int alarmID = 1;
@@ -73,7 +72,6 @@ public class ActivityTarea extends AppCompatActivity {
 
     int PERMISSION_ID = 44;
 
-    // Datos del recordatorio
     int horasRecordatorio, diasRecordatorio, minutosRecordatorio;
 
     @Override
@@ -113,7 +111,6 @@ public class ActivityTarea extends AppCompatActivity {
             fechaLimiteSeleccionada = new Date();
             horaLimiteSeleccionada = new Date();
             tv_tituloNuevaTarea.setText("Nueva Tarea");
-            //Toast.makeText(getApplicationContext(), "Crear una nueva tarea.", Toast.LENGTH_SHORT).show();
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         }
         mostrarFecha();
@@ -219,11 +216,6 @@ public class ActivityTarea extends AppCompatActivity {
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
-    /**
-     * Botón para modificar o crear nueva tarea
-     * IMPORTANTE: aquí se llama a crearNotificacion()
-     * Se hace aquí porque hasta entonces no se sabe el id de la tarea (si se está creando), que es el dato que necesita guardar la notificación
-     */
     public void buttonOkClick(View view) {
 
         String titulo = editTextTareaTitulo.getText().toString();
@@ -274,10 +266,7 @@ public class ActivityTarea extends AppCompatActivity {
                     super.onDismissed(transientBottomBar, event);
 
                     if (event != DISMISS_EVENT_ACTION) {
-
-                        // Entrará aquí si NO se pulsa el botón undo
                         tareaLab.updateTarea(tareaEditar);
-
                     }
                     setResult(RESULT_OK);
                     finish();
@@ -285,15 +274,8 @@ public class ActivityTarea extends AppCompatActivity {
                 }
             });
             snackbar.show();
-
-            //createNotification(tareaEditar.mId);
         }
     }
-
-    ///////////////////////////////////////////
-    // UBICACIÓN
-    ///////////////////////////////////////////
-
 
     public void seleccionarPosicionEnMapa(View view) {
 
@@ -319,11 +301,6 @@ public class ActivityTarea extends AppCompatActivity {
         });
         snackbarUbicacion.show();
     }
-
-
-    //////////////////////////////////////////
-    // MODIFICAR FECHA Y HORA
-    //////////////////////////////////////////
 
     public void cambiarFecha(View view) {
 
@@ -372,10 +349,6 @@ public class ActivityTarea extends AppCompatActivity {
         tpd.show();
     }
 
-    ///////////////////////////////////////
-    // DIÁLOGO DE RECORDATORIO
-    ///////////////////////////////////////
-
     public void dialogoRecordatorio(View view) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(ActivityTarea.this);
@@ -390,18 +363,11 @@ public class ActivityTarea extends AppCompatActivity {
 
     }
 
-    /**
-     * Salir del diálogo de recordatorio
-     */
     public void cancelarDialogoRecordatorio(View view) {
 
         dialog.dismiss();
     }
 
-
-    /**
-     * Salir del diálogo de recordatorio
-     */
     public void aceptarDialogoRecordatorio(View view) {
 
         String numeroEscrito = ed_digitoRecordatorio.getText().toString();
@@ -436,11 +402,6 @@ public class ActivityTarea extends AppCompatActivity {
 
     }
 
-    ///////////////////////////////////////
-    // MOSTRAR NOTIFICACIÓN
-    ///////////////////////////////////////
-
-
     public void generarNotificacionProgramada() {
 
         Tarea tarea = ControlTareas.getInstance().tareaActual;
@@ -471,5 +432,4 @@ public class ActivityTarea extends AppCompatActivity {
         alarmIntent.setData((Uri.parse("custom://" + System.currentTimeMillis())));
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendarAlarma.getTimeInMillis(), pendingIntent);
     }
-
 }

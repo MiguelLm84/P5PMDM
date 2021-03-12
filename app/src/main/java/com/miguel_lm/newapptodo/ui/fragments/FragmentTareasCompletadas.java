@@ -228,6 +228,5 @@ public class FragmentTareasCompletadas extends Fragment implements ListenerTarea
         listaTareasSeleccionadas.clear();
         toolBar.setVisibility(View.GONE);
         adapterTareasCompletadas.notifyDataSetChanged();
-        //Toast.makeText(getContext(), "Salir sin seleccionar", Toast.LENGTH_SHORT).show();
     }
 }

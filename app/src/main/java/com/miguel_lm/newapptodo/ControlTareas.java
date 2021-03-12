@@ -4,7 +4,6 @@ import com.miguel_lm.newapptodo.core.Tarea;
 
 public class ControlTareas {
 
-    // Singleton
     private static final ControlTareas instance = new ControlTareas();
     public static ControlTareas getInstance() {
         return instance;

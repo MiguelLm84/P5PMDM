@@ -254,7 +254,6 @@ public class FragmentTareas extends Fragment implements ListenerTareas {
         listaTareasSeleccionadas.clear();
         toolBar.setVisibility(View.GONE);
         adapterTareas.notifyDataSetChanged();
-        //Toast.makeText(getContext(), "Salir sin seleccionar", Toast.LENGTH_SHORT).show();
     }
 
     public void ordenarPorFechas(Tarea tarea){
